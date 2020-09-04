@@ -1,0 +1,108 @@
+<mat-toolbar class="navbar navbar-principal sticky-top d-flex justify-content-between ">
+  <div class="d-flex align-items-center">
+    <button
+            class="navbar-toggler position-absolute d-md-block collapsed mr-2"
+            type="button"
+            (click)="abrirDashboar()"
+            data-toggle="collapse"
+            data-target="#sidebarMenu"
+            aria-controls="sidebarMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <div class="d-flex align-items-center">
+        <img class="imagen-navbar" src="../../../assets/images/logo.png" alt="logo">
+        <h2 class="titulo-navbar">PhanterGaming</h2>
+      </div>
+    </button>
+
+  </div>
+
+  <div class="d-flex align-items-center">
+    <button mat-icon-button class="mr-2">
+      <i class="far fa-bell icono-navbar"></i>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>login</mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="false">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+
+</mat-toolbar>
+
+
+<div class="container-fluid animated fadeIn">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link dashboard" href="#" [routerLinkActive]>
+              <i class="fas fa-home icono-dashboard"></i>
+              Dashboard
+            </a>
+          </li>
+          <span class="border"></span>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="">
+              <i class="fas fa-receipt iconos"></i>
+              Pedidos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="">
+              <i class="fas fa-shopping-cart iconos"></i>
+              Productos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="">
+              <i class="fas fa-truck iconos"></i>
+              Proveedores
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-user iconos"></i>
+              Clientes
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-comment iconos"></i>
+              Mensajes
+            </a>
+          </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mr-2 mt-3 mb-1">
+          <span>Reportes generados</span>
+          <div>
+            <i class="far fa-chart-bar icono-reporte"></i>
+          </div>
+        </h6>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link nav-reporte" href="#">
+              <i class="fas fa-file-alt iconos-reporte"></i>
+              <span>Semana actual</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-reporte" href="#">
+              <i class="fas fa-file-alt iconos-reporte"></i>
+              <span>Mes actual</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-reporte" href="#">
+              <i class="fas fa-file-alt iconos-reporte"></i>
+              <span>Año actual</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
