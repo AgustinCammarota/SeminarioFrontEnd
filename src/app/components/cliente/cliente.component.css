@@ -11,3 +11,16 @@ table {
 .example-full-width {
   width: 100%;
 }
+
+table td {
+  color: #8d8d98;
+}
+
+table th {
+  color: #4f4d4d;
+}
+
+.p-mat-cell {
+  padding-right: 0 !important;
+  margin-right: 0!important;
+}
