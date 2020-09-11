@@ -9,6 +9,10 @@ span {
   font-size: 13px !important;
 }
 
+.contenedor-padre {
+  margin-top: 100px;
+}
+
 .navbar-principal {
   margin-left: 0 !important;
   padding-left: 0 !important;
@@ -65,7 +69,7 @@ span {
   margin-left: 5px;
   font-size: 20px;
   padding: 5px 5px 8px 0;
-  margin-top: 90px;
+  margin-top: 30px;
 }
 
 .border {
@@ -83,12 +87,11 @@ span {
 }
 
 .sidebar {
-  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   z-index: 100;
-  padding: 0 0 0;
+  padding: 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 }
 
@@ -133,7 +136,6 @@ span {
   color: #ffffff !important;
 }
 
-
 @supports ((position: -webkit-sticky) or (position: sticky)) {
   .sidebar-sticky {
     position: -webkit-sticky;
@@ -150,4 +152,3 @@ span {
   }
 
 }
-

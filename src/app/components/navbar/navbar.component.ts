@@ -13,7 +13,10 @@ export class NavbarComponent implements OnInit {
   }
 
   abrirDashboar(): void {
-    document.getElementById('sidebarMenu').classList.remove('d-md-block');
+
+    const elemento = document.getElementById('sidebarMenu');
+    elemento.classList.toggle('d-md-block');
+
   }
 
 }

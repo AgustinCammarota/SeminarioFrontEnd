@@ -38,7 +38,7 @@
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link dashboard" href="#" [routerLinkActive]>
+            <a class="nav-link dashboard" routerLink="/home" routerLinkActive="active">
               <i class="fas fa-home icono-dashboard"></i>
               Dashboard
             </a>
@@ -63,7 +63,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" routerLink="/clientes" routerLinkActive="active">
               <i class="fas fa-user iconos"></i>
               Clientes
             </a>
@@ -104,5 +104,13 @@
         </ul>
       </div>
     </nav>
+
+    <div class="col-12 col-md-8 container contenedor-padre">
+      <router-outlet></router-outlet>
+    </div>
+
   </div>
+
 </div>
+
+

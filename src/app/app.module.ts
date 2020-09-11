@@ -7,19 +7,26 @@ import {RoutesRoutingModule} from './routes-routing.module';
 import {MaterialModule} from './material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
+import {HttpClientModule} from '@angular/common/http';
+import { ClienteComponent } from './components/cliente/cliente.component';
+import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    ClienteComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    RoutesRoutingModule,
-    MaterialModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        RoutesRoutingModule,
+        MaterialModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
