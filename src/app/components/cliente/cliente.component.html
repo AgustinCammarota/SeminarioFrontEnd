@@ -17,6 +17,9 @@
                matInput
                [formControl]="nombreControl"
                [matAutocomplete]="auto">
+        <mat-icon matSuffix class="limpiar-filtro" (click)="limpiarFiltro()">
+          clear
+        </mat-icon>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                           (optionSelected)="seleccionarCliente($event)"
                           [displayWith]="mostrarNombre">
@@ -75,7 +78,7 @@
           <button class="btn">
             <i class="fas fa-pencil-alt"></i>
           </button>
-          <button class="btn">
+          <button class="btn" (click)="borrarCliente(cliente)">
             <i class="text-danger far fa-trash-alt"></i>
           </button>
         </td>

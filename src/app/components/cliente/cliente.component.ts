@@ -7,6 +7,7 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {flatMap, map} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cliente',
@@ -47,9 +48,11 @@ export class ClienteComponent implements OnInit {
   calcularRangos(): void {
     this.clienteService.getClientesPage(this.page.toString(), this.size.toString()).subscribe(cliente => {
       this.cliente = cliente;
+      this.clientes = this.cliente.content;
       this.loading = false;
       this.totalElements = cliente.totalElements as number;
-      this.dataSource = new MatTableDataSource<Cliente[]>(this.cliente.content);
+      // @ts-ignore
+      this.dataSource = new MatTableDataSource<Cliente[]>(this.clientes);
       this.cargarClientes();
     }, error => {
       console.log(error);
@@ -62,8 +65,43 @@ export class ClienteComponent implements OnInit {
 
   seleccionarCliente(event: MatAutocompleteSelectedEvent): void {
     const clienteSelect = event.option.value as Cliente;
-    // @ts-ignore
+      // @ts-ignore
     this.dataSource.data = this.clientes.filter(cliente => cliente.id === clienteSelect.id);
+  }
+
+  limpiarFiltro(): void {
+    // Agregar quitar filtros mensjaes
+    this.dataSource.data = this.cliente.content;
+  }
+
+  borrarCliente(cliente: Cliente): void {
+    Swal.fire({
+      title: `¿Está seguro de eliminar al cliente ${cliente.nombre.toUpperCase()}?`,
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, borrarlo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.clienteService.deleteCliente(cliente).subscribe(() => {
+          this.clientes = this.clientes.filter(c => c.id === cliente.id);
+          Swal.fire(
+            'Eliminado!',
+            'El cliente ha sido eliminado.',
+            'success'
+          );
+          this.calcularRangos();
+        }, () => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Ha ocurrido un error al elminar el cliente`,
+          });
+        });
+      }
+    });
   }
 
   private filtrar(termino: string): Observable<Cliente[]> {
@@ -76,6 +114,7 @@ export class ClienteComponent implements OnInit {
       this.clientes = clientes;
       this.loading = false;
     }, error => {
+      // Agregar pagina estatica 404
       console.log(error);
     });
   }

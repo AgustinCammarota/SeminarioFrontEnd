@@ -24,3 +24,7 @@ table th {
   padding-right: 0 !important;
   margin-right: 0!important;
 }
+
+.limpiar-filtro {
+  cursor: pointer;
+}
