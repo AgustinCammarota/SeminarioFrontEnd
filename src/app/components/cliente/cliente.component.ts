@@ -8,6 +8,9 @@ import {Observable} from 'rxjs';
 import {flatMap, map} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import Swal from 'sweetalert2';
+import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {FormularioComponent} from './formulario/formulario.component';
 
 @Component({
   selector: 'app-cliente',
@@ -28,7 +31,9 @@ export class ClienteComponent implements OnInit {
   dataSource: MatTableDataSource<Cliente[]>;
   loading = true;
 
-  constructor(private clienteService: ClienteService) { }
+  constructor(private clienteService: ClienteService,
+              private router: Router,
+              public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.calcularRangos();
@@ -54,8 +59,8 @@ export class ClienteComponent implements OnInit {
       // @ts-ignore
       this.dataSource = new MatTableDataSource<Cliente[]>(this.clientes);
       this.cargarClientes();
-    }, error => {
-      console.log(error);
+    }, () => {
+      this.router.navigate(['/error']);
     });
   }
 
@@ -70,8 +75,8 @@ export class ClienteComponent implements OnInit {
   }
 
   limpiarFiltro(): void {
-    // Agregar quitar filtros mensjaes
     this.dataSource.data = this.cliente.content;
+    this.nombreControl.reset();
   }
 
   borrarCliente(cliente: Cliente): void {
@@ -104,6 +109,14 @@ export class ClienteComponent implements OnInit {
     });
   }
 
+  openFormulario(): void {
+    const dialogRef = this.dialog.open(FormularioComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
   private filtrar(termino: string): Observable<Cliente[]> {
     return this.clienteService.getClienteFiltro(termino.toLowerCase());
   }
@@ -113,9 +126,8 @@ export class ClienteComponent implements OnInit {
     this.clienteService.getClientes().subscribe(clientes => {
       this.clientes = clientes;
       this.loading = false;
-    }, error => {
-      // Agregar pagina estatica 404
-      console.log(error);
+    }, () => {
+      this.router.navigate(['/error']);
     });
   }
 

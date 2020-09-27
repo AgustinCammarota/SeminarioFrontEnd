@@ -28,3 +28,38 @@ table th {
 .limpiar-filtro {
   cursor: pointer;
 }
+
+.alert {
+  width: 100% !important;
+  height: 70px !important;
+  display:inline-block;
+  text-align: center;
+}
+
+.icono-card {
+  font-size: 50px;
+}
+
+.titulo-card {
+  font: 400 34px/40px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: normal;
+}
+
+.border-card {
+  border: rgba(48, 46, 46, 0.7) solid 3px;
+  border-radius: 0 0 0 50px;
+}
+
+.botones-tabla {
+  box-shadow: none !important;
+}
+
+.btn:focus {
+  outline: none !important;
+}
+
+.btn:focus {
+  outline: none !important;
+  background-color: transparent;
+  border: 1px solid transparent;
+}

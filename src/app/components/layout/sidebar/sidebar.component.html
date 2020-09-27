@@ -1,0 +1,38 @@
+<div class="logo">
+  <a href="#" class="simple-text">
+    <div class="logo-img">
+      <img src="./assets/images/logo.png"/>
+    </div>
+    <span class="tim-note ml-3">Phanter Gaming</span>
+  </a>
+</div>
+<div class="sidebar-wrapper">
+  <ul class="nav">
+    <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
+      <a class="nav-link" [routerLink]="[menuItem.path]">
+        <i class="material-icons text-dark">{{menuItem.icon}}</i>
+        <p>{{menuItem.title}}</p>
+      </a>
+    </li>
+    <div *ngIf="isMobileMenu()">
+      <ul class="nav navbar-nav nav-mobile-menu mt-3">
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="material-icons text-dark">notifications</i>
+            <p>
+              Notificaciones
+            </p>
+            <!--          <span class="notification"></span>-->
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink"></div>
+        </li>
+        <li class="nav-item boton-login">
+          <a class="nav-link" href="#">
+            <i class="material-icons text-dark">login</i>
+            <p>Login</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </ul>
+</div>
