@@ -9,10 +9,9 @@ import {RouterModule} from '@angular/router';
 import {MaterialModule} from '../material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import { ErrorComponent } from './layout/error/error.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { FormularioComponent } from './cliente/formulario/formulario.component';
-
+import {NgxMaskModule} from 'ngx-mask';
 
 
 @NgModule({
@@ -22,7 +21,6 @@ import { FormularioComponent } from './cliente/formulario/formulario.component';
     ClienteComponent,
     SidebarComponent,
     LayoutComponent,
-    ErrorComponent,
     FooterComponent,
     FormularioComponent
   ],
@@ -32,7 +30,8 @@ import { FormularioComponent } from './cliente/formulario/formulario.component';
     MaterialModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxMaskModule.forChild()
   ], exports: [
     NavbarComponent,
     HomeComponent,
