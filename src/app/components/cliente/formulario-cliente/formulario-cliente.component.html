@@ -1,0 +1,77 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-10">
+      <div mat-dialog-title class="d-flex align-items-center bordes">
+        <i class="material-icons titulo-color" style="font-size: 40px">mail_outline</i>
+        <span class="ml-2 tim-note titulo-color">{{titulo}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <mat-dialog-content class="mat-typography">
+        <form autocomplete="off" [formGroup]="formulario" style="margin-bottom: 0 !important;">
+        <div class="row">
+
+            <div class="col-md-12 mt-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Nombre Completo*</mat-label>
+                <input matInput formControlName="nombre" maxlength="50" type="text">
+                <mat-icon matSuffix>account_circle</mat-icon>
+                <mat-hint>Ej. Phanter Gaming</mat-hint>
+                <mat-error *ngIf="nombreNovalido">
+                  El Nombre no puede contener numeros o caracteres especiales
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-4">
+              <mat-form-field appearance="fill">
+                <mat-label>Correo Electronico*</mat-label>
+                <input matInput formControlName="email" maxlength="50">
+                <mat-icon matSuffix>alternate_email</mat-icon>
+                <mat-hint>Ej. pat@example.com</mat-hint>
+                <mat-error *ngIf="emailNovalido">
+                  El Correo tiene que tener un formato valido. Ej pat@example.com
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-3">
+              <mat-form-field appearance="fill">
+                <mat-label>DNI*</mat-label>
+                <input matInput formControlName="dni" mask="00.000.000">
+                <mat-icon matSuffix>payment</mat-icon>
+                <mat-hint>Ej. 40.657.801</mat-hint>
+                <mat-error *ngIf="dniNovalido">
+                  El DNI tiene que tener un formato valido. Ej 40.657.801
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-3 mb-4">
+              <mat-form-field appearance="fill">
+                <mat-label>Telefono</mat-label>
+                <input matInput formControlName="telefono" mask=" (000) 0000-0000" prefix="+54">
+                <mat-icon matSuffix>phone</mat-icon>
+                <mat-hint>Ej. (000) 0000-0000</mat-hint>
+                <mat-error *ngIf="telefonoNovalido">
+                  El Telefono tiene que tener un formato valido. Ej (000) 0000-0000
+                </mat-error>
+              </mat-form-field>
+            </div>
+        </div>
+        </form>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end" class="mb-1">
+        <button mat-stroked-button mat-dialog-close color="warn">Cancelar</button>
+        <button mat-stroked-button [disabled]="formulario.invalid" type="button" (click)="guardar()" color="primary">Guardar</button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+
+</div>
+
+

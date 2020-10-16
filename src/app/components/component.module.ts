@@ -10,8 +10,9 @@ import {MaterialModule} from '../material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { FooterComponent } from './layout/footer/footer.component';
-import { FormularioComponent } from './cliente/formulario/formulario.component';
+import { FormularioClienteComponent } from './cliente/formulario-cliente/formulario-cliente.component';
 import {NgxMaskModule} from 'ngx-mask';
+import {ErrorComponent} from './layout/error/error.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {NgxMaskModule} from 'ngx-mask';
     SidebarComponent,
     LayoutComponent,
     FooterComponent,
-    FormularioComponent
+    FormularioClienteComponent,
+    ErrorComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import {NgxMaskModule} from 'ngx-mask';
     HomeComponent,
     ClienteComponent,
     SidebarComponent,
-    LayoutComponent
+    LayoutComponent,
+    ErrorComponent
   ]
 })
 export class ComponentModule { }

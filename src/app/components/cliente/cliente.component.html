@@ -1,15 +1,15 @@
 
-<div *ngIf="!cliente && !loading" class="animated fade fadeIn">
+<div *ngIf="clientes.length === 0 && !loading" class="animated fade fadeIn">
   <div class="alert alert-warning text-center">
     <span class="mt-2 pt-1"><strong>¡No hay clientes en los registros!</strong></span>
   </div>
 </div>
 
-<div class="container" style="margin-top: 10rem;">
+<div class="container" style="margin-top: 10%;">
   <div class="row d-flex">
     <div class="col-12">
-      <div *ngIf="loading" class="text-center" style="margin-top: 15rem;"><i class="fas fa-spinner fa-4x fa-pulse"></i></div>
-      <div class="card" *ngIf="cliente && !loading">
+      <div *ngIf="loading" class="text-center" style="margin-top: 20%;"><i class="fas fa-spinner fa-4x fa-pulse"></i></div>
+      <div class="card" *ngIf="clientes.length > 0 && !loading">
         <div class="card-header d-flex align-items-center border-card">
             <span class="mr-2"><i class="material-icons icono-card">person</i></span>
             <span class="titulo-card">Clientes</span>
@@ -24,7 +24,8 @@
                          placeholder="Filtrar por nombre"
                          matInput
                          [formControl]="nombreControl"
-                         [matAutocomplete]="auto">
+                         [matAutocomplete]="auto"
+                         (keypress)="filtrarCliente()">
                   <mat-icon matSuffix class="limpiar-filtro" (click)="limpiarFiltro()">
                     clear
                   </mat-icon>
@@ -37,13 +38,13 @@
                   </mat-autocomplete>
                 </mat-form-field>
               </form>
-              <button class="btn btn-outline-success text-success" (click)="openFormulario()">
+              <button class="btn btn-outline-success text-success" (click)="openFormulario('N')">
                 <span class="pr-2">Nuevo</span>
                 <i class="fas fa-1x fa-plus-square"></i>
               </button>
             </div>
             <div class="mat-elevation-z8">
-              <table mat-table [dataSource]="dataSource">
+              <table class="table-hover" mat-table [dataSource]="dataSource">
 
                 <ng-container matColumnDef="No.">
                   <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -52,7 +53,7 @@
 
                 <ng-container matColumnDef="Nombre">
                   <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.nombre}} </td>
+                  <td mat-cell *matCellDef="let cliente"> {{cliente.nombre.toUpperCase()}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Correo">
@@ -62,12 +63,12 @@
 
                 <ng-container matColumnDef="DNI">
                   <th mat-header-cell *matHeaderCellDef> DNI </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.dni}} </td>
+                  <td mat-cell *matCellDef="let cliente"> {{cliente.dni | mask: '00.000.000'}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Telefono">
                   <th mat-header-cell *matHeaderCellDef> Telefono </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.telefono}} </td>
+                  <td mat-cell *matCellDef="let cliente"> {{cliente.telefono | mask: '(000) 0000-0000'}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Fecha">
@@ -81,7 +82,7 @@
                     <button class="btn botones-tabla text-dark">
                       <i class="far fa-eye"></i>
                     </button>
-                    <button class="btn botones-tabla text-dark">
+                    <button class="btn botones-tabla text-dark" (click)="openFormulario('E', cliente)">
                       <i class="fas fa-pencil-alt"></i>
                     </button>
                     <button class="btn botones-tabla" (click)="borrarCliente(cliente)">
