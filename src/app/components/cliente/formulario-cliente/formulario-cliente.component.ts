@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 
+
 @Component({
   selector: 'app-formulario',
   templateUrl: './formulario-cliente.component.html',
@@ -14,8 +15,9 @@ import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition}
 export class FormularioClienteComponent implements OnInit {
 
   formulario: FormGroup;
-  cliente: Cliente;
+  cliente: Cliente | any = {};
   titulo: string;
+  loading = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
@@ -23,20 +25,22 @@ export class FormularioClienteComponent implements OnInit {
               private service: ClienteService,
               private snackBar: MatSnackBar,
               private dialogRef: MatDialogRef<FormularioClienteComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: Cliente) {}
+
+  ngOnInit(): void {
     this.crearFormulario();
     this.titulo = Object.keys(this.data).length === 0 ? 'Registrar Cliente' : 'Actualizar Cliente';
   }
 
-  ngOnInit(): void {}
-
   guardar(): void {
+    this.loading = true;
     this.cliente = new Cliente(this.formulario.value.nombre.trim(),
                                 this.formulario.value.email.trim(),
                                 this.formulario.value.dni,
                                 this.formulario.value.telefono);
     if (Object.keys(this.data).length === 0) {
       this.service.saveCliente(this.cliente).subscribe(cliente => {
+        this.loading = false;
         this.snackBar.open(`¡Cliente ${cliente.nombre} agregado con exito!`, 'Cerrar', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
@@ -44,6 +48,7 @@ export class FormularioClienteComponent implements OnInit {
         });
         this.dialogRef.close(cliente);
       }, error => {
+        this.loading = false;
         Swal.fire({
           icon: 'error',
           title: error.error.mensaje,
@@ -53,6 +58,7 @@ export class FormularioClienteComponent implements OnInit {
     } else {
       this.cliente.id = this.data.id;
       this.service.updateCliente(this.cliente).subscribe(cliente => {
+        this.loading = false;
         this.snackBar.open(`¡Cliente ${cliente.nombre} actualizado con exito!`, 'Cerrar', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
@@ -60,6 +66,7 @@ export class FormularioClienteComponent implements OnInit {
         });
         this.dialogRef.close(cliente);
       }, error => {
+        this.loading = false;
         Swal.fire({
           icon: 'error',
           title: error.error.mensaje,

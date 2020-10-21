@@ -33,7 +33,7 @@
                                     (optionSelected)="seleccionarCliente($event)"
                                     [displayWith]="mostrarNombre">
                     <mat-option *ngFor="let cliente of clienteFiltrado | async" [value]="cliente">
-                      {{cliente.nombre}}
+                      {{cliente.nombre ? cliente.nombre : ''}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>

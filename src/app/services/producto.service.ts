@@ -43,13 +43,15 @@ export class ProductoService {
   }
 
   private createFormDate(producto: Producto, archivo: File): FormData {
-    const formatData = new FormData();
-    formatData.append('archivo', archivo);
-    formatData.append('nombre', producto.nombre);
-    formatData.append('precio', producto.precio);
-    formatData.append('cantidad', producto.cantidad);
-    formatData.append('descripcion', producto.descripcion);
-    formatData.append('estado', producto.estado);
-    return formatData;
+    const formDataProducto = new FormData();
+    formDataProducto.append('archivo', archivo);
+    formDataProducto.append('nombre', producto.nombre);
+    formDataProducto.append('precio', producto.precio);
+    formDataProducto.append('cantidad', producto.cantidad.toString());
+    formDataProducto.append('descripcion', producto.descripcion);
+    formDataProducto.append('estado', producto.estado.toString());
+    formDataProducto.append('categoria', JSON.stringify(producto.categoria));
+
+    return formDataProducto;
   }
 }

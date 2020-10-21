@@ -39,12 +39,10 @@ export class ClienteComponent implements OnInit {
   }
 
   filtrarCliente(): void {
-
     this.clienteFiltrado = this.nombreControl.valueChanges.pipe(
       map(value => typeof value === 'string' ? value : value.nombre),
       flatMap(value => value ? this.filtrar(value) : []),
     );
-
   }
 
   paginar(event: PageEvent): void {
@@ -69,13 +67,12 @@ export class ClienteComponent implements OnInit {
   }
 
   seleccionarCliente(event: MatAutocompleteSelectedEvent): void {
-    const clienteFiltrado: any[] = [];
-    clienteFiltrado.push(event.option.value);
-    this.dataSource.data = clienteFiltrado;
+    this.dataSource.data = [event.option.value];
   }
 
   limpiarFiltro(): void {
     this.dataSource.data = this.clientes;
+    this.clienteFiltrado = new Observable<Cliente[]>();
     this.nombreControl.reset();
   }
 
@@ -133,6 +130,7 @@ export class ClienteComponent implements OnInit {
           this.clientes.splice(indexCliente, 1, result);
           this.dataSource.data = this.clientes;
         } else {
+          this.loading = true;
           this.clientes.push(result);
           this.calcularRangos();
         }

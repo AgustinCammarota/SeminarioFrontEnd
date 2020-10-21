@@ -1,1 +1,85 @@
-<p>formulario-producto works!</p>
+<div class="container">
+
+  <div *ngIf="loading" class="text-center my-5"><i class="fas fa-spinner fa-4x fa-pulse"></i></div>
+
+  <div class="row" *ngIf="!loading">
+    <div class="col-md-12">
+      <div mat-dialog-title class="d-flex align-items-center bordes">
+        <i class="material-icons titulo-color ml-4" style="font-size: 50px">shopping_basket</i>
+        <span class="ml-3 tim-note titulo-color">{{titulo}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!loading">
+    <div class="col-md-12">
+      <mat-dialog-content class="mat-typography">
+        <form autocomplete="off" [formGroup]="formulario" style="margin-bottom: 0 !important;">
+          <div class="row">
+
+            <div class="col-md-6 mt-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Nombre*</mat-label>
+                <input matInput formControlName="nombre" maxlength="50" type="text">
+                <mat-hint>Ej. Monitor Asus 32vh</mat-hint>
+                <mat-error *ngIf="validarNombre">
+                  El Nombre no puede contener caracteres especiales
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 mt-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Precio*</mat-label>
+                <input matInput formControlName="precio" maxlength="10" type="text" mask="separator.2" thousandSeparator="," prefix="$ ">
+                <mat-hint>Ej. 1,000.00</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 mt-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Stock*</mat-label>
+                <input matInput formControlName="cantidad" type="text" maxlength="4" mask="0*">
+                <mat-hint>Ej. 12</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 mt-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Categoria*</mat-label>
+                <mat-select formControlName="categoria">
+                  <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+                    {{categoria.categoria}}
+                  </mat-option>
+                </mat-select>
+                <mat-hint>Ej. Monitor</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Seleccionar un archivo</mat-label>
+                <ngx-mat-file-input formControlName="archivo" (change)="seleccionarFoto($event)"></ngx-mat-file-input>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-2 mb-4">
+              <mat-form-field appearance="fill">
+                <mat-label>Descripción*</mat-label>
+                <textarea maxlength="250" formControlName="descripcion" matInput></textarea>
+                <mat-hint>Ej. Monitor gamer curvo de 34 pulgadas...</mat-hint>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </form>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end" class="mb-1">
+        <button mat-raised-button color="warn" mat-dialog-close>Cancelar</button>
+        <button mat-stroked-button [disabled]="formulario.invalid || fotoSeleccionada === null" type="button" (click)="guardar()" color="primary">Guardar</button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+
+</div>
+

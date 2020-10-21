@@ -1,0 +1,65 @@
+table {
+  width: 100%;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+table td {
+  color: #8d8d98;
+}
+
+table th {
+  color: #4f4d4d;
+}
+
+.p-mat-cell {
+  padding-right: 0 !important;
+  margin-right: 0!important;
+}
+
+.limpiar-filtro {
+  cursor: pointer;
+}
+
+.alert {
+  width: 100% !important;
+  height: 70px !important;
+  display:inline-block;
+  text-align: center;
+}
+
+.icono-card {
+  font-size: 50px;
+}
+
+.titulo-card {
+  font: 400 34px/40px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: normal;
+}
+
+.border-card {
+  border: rgba(48, 46, 46, 0.7) solid 3px;
+  border-radius: 0 0 0 50px;
+}
+
+.botones-tabla {
+  box-shadow: none !important;
+}
+
+.btn:focus {
+  outline: none !important;
+}
+
+.btn:focus {
+  outline: none !important;
+  background-color: transparent;
+  border: 1px solid transparent;
+}

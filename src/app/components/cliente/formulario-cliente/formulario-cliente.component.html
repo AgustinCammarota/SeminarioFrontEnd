@@ -1,7 +1,9 @@
 <div class="container">
 
-  <div class="row">
-    <div class="col-md-10">
+  <div *ngIf="loading" class="text-center my-5"><i class="fas fa-spinner fa-4x fa-pulse"></i></div>
+
+  <div class="row" *ngIf="!loading">
+    <div class="col-md-12">
       <div mat-dialog-title class="d-flex align-items-center bordes">
         <i class="material-icons titulo-color" style="font-size: 40px">mail_outline</i>
         <span class="ml-2 tim-note titulo-color">{{titulo}}</span>
@@ -9,7 +11,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="!loading">
     <div class="col-md-12">
       <mat-dialog-content class="mat-typography">
         <form autocomplete="off" [formGroup]="formulario" style="margin-bottom: 0 !important;">
@@ -66,7 +68,7 @@
         </form>
       </mat-dialog-content>
       <mat-dialog-actions align="end" class="mb-1">
-        <button mat-stroked-button mat-dialog-close color="warn">Cancelar</button>
+        <button mat-raised-button color="warn" mat-dialog-close>Cancelar</button>
         <button mat-stroked-button [disabled]="formulario.invalid" type="button" (click)="guardar()" color="primary">Guardar</button>
       </mat-dialog-actions>
     </div>

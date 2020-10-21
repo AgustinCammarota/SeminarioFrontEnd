@@ -1,3 +1,5 @@
+import {Categoria} from './categoria';
+
 export interface PageProducto {
   content: Producto[];
   pageable: Pageable;
@@ -16,20 +18,22 @@ export interface Producto {
   id?: number;
   nombre: string;
   precio: string;
-  cantidad: string;
+  cantidad: number;
   descripcion: string;
   archivo: any;
-  estado?: string;
+  categoria: Categoria;
+  estado?: boolean;
   fechaCreate?: string;
 }
 
 export class Producto {
   constructor(public nombre: string,
               public precio: string,
-              public cantidad: string,
+              public cantidad: number,
               public descripcion: string,
               public archivo: any,
-              public estado?: string,
+              public categoria: Categoria,
+              public estado?: boolean,
               public id?: number) {}
 }
 

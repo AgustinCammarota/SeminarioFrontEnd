@@ -5,8 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {RoutesRoutingModule} from './routes-routing.module';
 import {ComponentModule} from './components/component.module';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
-import { ProductoComponent } from './components/producto/producto.component';
-import { FormularioProductoComponent } from './components/producto/formulario-producto/formulario-producto.component';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -14,17 +12,15 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ProductoComponent,
-    FormularioProductoComponent
+    AppComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RoutesRoutingModule,
-        ComponentModule,
-        NgxMaskModule.forRoot(options)
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    RoutesRoutingModule,
+    ComponentModule,
+    NgxMaskModule.forRoot(options),
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
