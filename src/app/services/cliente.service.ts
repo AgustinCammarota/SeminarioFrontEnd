@@ -13,10 +13,6 @@ export class ClienteService {
 
   constructor(private http: HttpClient) { }
 
-  getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(`${URL_API_CLIENTES}`);
-  }
-
   getClientesPage(page: string, size: string): Observable<PageCliente> {
     const params = new HttpParams().set('page', page).set('size', size);
     return this.http.get<PageCliente>(`${URL_API_CLIENTES}/page`, {params});

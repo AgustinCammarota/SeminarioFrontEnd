@@ -10,8 +10,11 @@ import {MaterialModule} from '../material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { FooterComponent } from './layout/footer/footer.component';
-import { FormularioComponent } from './cliente/formulario/formulario.component';
+import { FormularioClienteComponent } from './cliente/formulario-cliente/formulario-cliente.component';
 import {NgxMaskModule} from 'ngx-mask';
+import {ErrorComponent} from './layout/error/error.component';
+import {ProductoComponent} from './producto/producto.component';
+import {FormularioProductoComponent} from './producto/formulario-producto/formulario-producto.component';
 
 
 @NgModule({
@@ -19,10 +22,13 @@ import {NgxMaskModule} from 'ngx-mask';
     NavbarComponent,
     HomeComponent,
     ClienteComponent,
+    ProductoComponent,
     SidebarComponent,
     LayoutComponent,
     FooterComponent,
-    FormularioComponent
+    FormularioClienteComponent,
+    FormularioProductoComponent,
+    ErrorComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +43,9 @@ import {NgxMaskModule} from 'ngx-mask';
     HomeComponent,
     ClienteComponent,
     SidebarComponent,
-    LayoutComponent
+    LayoutComponent,
+    ErrorComponent,
+    ProductoComponent
   ]
 })
 export class ComponentModule { }

@@ -1,7 +1,7 @@
 
-<div *ngIf="clientes.length === 0 && !loading" class="animated fade fadeIn">
+<div *ngIf="productos.length === 0 && !loading" class="animated fade fadeIn">
   <div class="alert alert-warning text-center">
-    <span class="mt-2 pt-1"><strong>¡No hay clientes en los registros!</strong></span>
+    <span class="mt-2 pt-1"><strong>¡No hay productos en los registros!</strong></span>
   </div>
 </div>
 
@@ -9,10 +9,10 @@
   <div class="row d-flex">
     <div class="col-12">
       <div *ngIf="loading" class="text-center" style="margin-top: 20%;"><i class="fas fa-spinner fa-4x fa-pulse"></i></div>
-      <div class="card" *ngIf="clientes.length > 0 && !loading">
+      <div class="card" *ngIf="productos.length > 0 && !loading">
         <div class="card-header d-flex align-items-center border-card">
-            <span class="mr-2"><i class="material-icons icono-card">person</i></span>
-            <span class="titulo-card">Clientes</span>
+          <span class="mr-2"><i class="material-icons icono-card">shopping_cart</i></span>
+          <span class="titulo-card">Productos</span>
         </div>
         <div class="card-body mb-3">
           <div class="animated fade fadeIn">
@@ -25,15 +25,15 @@
                          matInput
                          [formControl]="nombreControl"
                          [matAutocomplete]="auto"
-                         (keypress)="filtrarCliente()">
+                         (keypress)="filtrarProductos()">
                   <mat-icon matSuffix class="limpiar-filtro" (click)="limpiarFiltro()">
                     clear
                   </mat-icon>
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
-                                    (optionSelected)="seleccionarCliente($event)"
+                                    (optionSelected)="seleccionarProducto($event)"
                                     [displayWith]="mostrarNombre">
-                    <mat-option *ngFor="let cliente of clienteFiltrado | async" [value]="cliente">
-                      {{cliente.nombre ? cliente.nombre : ''}}
+                    <mat-option *ngFor="let producto of productoFiltrado | async" [value]="producto">
+                      {{producto.nombre}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -48,51 +48,56 @@
 
                 <ng-container matColumnDef="No.">
                   <th mat-header-cell *matHeaderCellDef> No. </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.id}} </td>
+                  <td mat-cell *matCellDef="let producto"> {{producto.id}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Nombre">
                   <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.nombre.toUpperCase()}} </td>
+                  <td mat-cell *matCellDef="let producto"> {{producto.nombre}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="Correo">
-                  <th mat-header-cell *matHeaderCellDef> Correo </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.email}} </td>
+                <ng-container matColumnDef="Precio">
+                  <th mat-header-cell *matHeaderCellDef> Precio </th>
+                  <td mat-cell *matCellDef="let producto"> {{producto.precio}}</td>
                 </ng-container>
 
-                <ng-container matColumnDef="DNI">
-                  <th mat-header-cell *matHeaderCellDef> DNI </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.dni | mask: '00.000.000'}} </td>
+                <ng-container matColumnDef="Cantidad">
+                  <th mat-header-cell *matHeaderCellDef> Cantidad </th>
+                  <td mat-cell *matCellDef="let producto"> {{producto.cantidad}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="Telefono">
-                  <th mat-header-cell *matHeaderCellDef> Telefono </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.telefono | mask: '(000) 0000-0000'}} </td>
+                <ng-container matColumnDef="Categoria">
+                  <th mat-header-cell *matHeaderCellDef> Categoria </th>
+                  <td mat-cell *matCellDef="let producto">   </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Estado">
+                  <th mat-header-cell *matHeaderCellDef> Estado </th>
+                  <td mat-cell *matCellDef="let producto"> {{producto.estado}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Fecha">
                   <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.fechaCreate}} </td>
+                  <td mat-cell *matCellDef="let producto"> {{producto.fechaCreate}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Acciones">
                   <th mat-header-cell *matHeaderCellDef></th>
-                  <td mat-cell *matCellDef="let cliente" class="p-mat-cell">
+                  <td mat-cell *matCellDef="let producto" class="p-mat-cell">
                     <button class="btn botones-tabla text-dark">
                       <i class="far fa-eye"></i>
                     </button>
-                    <button class="btn botones-tabla text-dark" (click)="openFormulario('E', cliente)">
+                    <button class="btn botones-tabla text-dark" (click)="openFormulario('E', producto)">
                       <i class="fas fa-pencil-alt"></i>
                     </button>
-                    <button class="btn botones-tabla" (click)="borrarCliente(cliente)">
+                    <button class="btn botones-tabla" (click)="borrarProducto(producto)">
                       <i class="text-danger far fa-trash-alt"></i>
                     </button>
                   </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let cliente; columns: displayedColumns;"></tr>
+                <tr mat-row *matRowDef="let producto; columns: displayedColumns;"></tr>
               </table>
 
               <mat-paginator
@@ -110,4 +115,3 @@
     </div>
   </div>
 </div>
-

@@ -10,7 +10,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import Swal from 'sweetalert2';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {FormularioComponent} from './formulario/formulario.component';
+import {FormularioClienteComponent} from './formulario-cliente/formulario-cliente.component';
 
 @Component({
   selector: 'app-cliente',
@@ -24,8 +24,7 @@ export class ClienteComponent implements OnInit {
   nombreControl = new FormControl();
   page = 0;
   size = 4;
-  clientes: Cliente[] = [];
-  cliente: PageCliente | Cliente | any = {};
+  clientes: Cliente[] | any = [];
   clienteFiltrado: Observable<Cliente[]>;
   displayedColumns: string[] = ['No.', 'Nombre', 'Correo', 'DNI', 'Telefono', 'Fecha', 'Acciones'];
   dataSource: MatTableDataSource<Cliente[]>;
@@ -37,10 +36,12 @@ export class ClienteComponent implements OnInit {
 
   ngOnInit(): void {
     this.calcularRangos();
+  }
 
+  filtrarCliente(): void {
     this.clienteFiltrado = this.nombreControl.valueChanges.pipe(
-        map(value => typeof value === 'string' ? value : value.nombre),
-        flatMap(value => value ? this.filtrar(value) : [])
+      map(value => typeof value === 'string' ? value : value.nombre),
+      flatMap(value => value ? this.filtrar(value) : []),
     );
   }
 
@@ -51,14 +52,11 @@ export class ClienteComponent implements OnInit {
   }
 
   calcularRangos(): void {
-    this.clienteService.getClientesPage(this.page.toString(), this.size.toString()).subscribe(cliente => {
-      this.cliente = cliente;
-      this.clientes = this.cliente.content;
+    this.clienteService.getClientesPage(this.page.toString(), this.size.toString()).subscribe((cliente: PageCliente) => {
       this.loading = false;
+      this.clientes = cliente.content;
       this.totalElements = cliente.totalElements as number;
-      // @ts-ignore
       this.dataSource = new MatTableDataSource<Cliente[]>(this.clientes);
-      this.cargarClientes();
     }, () => {
       this.router.navigate(['/error']);
     });
@@ -69,13 +67,12 @@ export class ClienteComponent implements OnInit {
   }
 
   seleccionarCliente(event: MatAutocompleteSelectedEvent): void {
-    const clienteSelect = event.option.value as Cliente;
-      // @ts-ignore
-    this.dataSource.data = this.clientes.filter(cliente => cliente.id === clienteSelect.id);
+    this.dataSource.data = [event.option.value];
   }
 
   limpiarFiltro(): void {
-    this.dataSource.data = this.cliente.content;
+    this.dataSource.data = this.clientes;
+    this.clienteFiltrado = new Observable<Cliente[]>();
     this.nombreControl.reset();
   }
 
@@ -98,37 +95,51 @@ export class ClienteComponent implements OnInit {
             'success'
           );
           this.calcularRangos();
-        }, () => {
+        }, error => {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: `Ha ocurrido un error al elminar el cliente`,
+            text: error.error.mensaje,
           });
         });
       }
     });
   }
 
-  openFormulario(): void {
-    const dialogRef = this.dialog.open(FormularioComponent);
+  openFormulario(tipo: string, cliente?: Cliente): void {
+    let dialogRef;
+
+    if (tipo === 'N') {
+      dialogRef = this.dialog.open(FormularioClienteComponent, {
+        width: '400px',
+        data: {}
+      });
+    } else {
+      dialogRef = this.dialog.open(FormularioClienteComponent, {
+        width: '400px',
+        data: cliente
+      });
+    }
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (!result || result === '') {
+        return;
+      } else {
+        if (tipo === 'E') {
+          const indexCliente = this.clientes.findIndex(c => c.id === cliente.id);
+          this.clientes.splice(indexCliente, 1, result);
+          this.dataSource.data = this.clientes;
+        } else {
+          this.loading = true;
+          this.clientes.push(result);
+          this.calcularRangos();
+        }
+      }
     });
   }
 
   private filtrar(termino: string): Observable<Cliente[]> {
     return this.clienteService.getClienteFiltro(termino.toLowerCase());
-  }
-
-  private cargarClientes(): void {
-    this.loading = true;
-    this.clienteService.getClientes().subscribe(clientes => {
-      this.clientes = clientes;
-      this.loading = false;
-    }, () => {
-      this.router.navigate(['/error']);
-    });
   }
 
 }

@@ -1,5 +1,7 @@
-export interface PageCliente {
-  content: Cliente[];
+import {Categoria} from './categoria';
+
+export interface PageProducto {
+  content: Producto[];
   pageable: Pageable;
   totalElements: number;
   last: boolean;
@@ -12,21 +14,26 @@ export interface PageCliente {
   empty: boolean;
 }
 
-export interface Cliente {
+export interface Producto {
   id?: number;
   nombre: string;
-  email: string;
-  dni: string;
-  telefono: string;
+  precio: string;
+  cantidad: number;
+  descripcion: string;
+  archivo: any;
+  categoria: Categoria;
+  estado?: boolean;
   fechaCreate?: string;
 }
 
-export class Cliente {
+export class Producto {
   constructor(public nombre: string,
-              public email: string,
-              public dni: string,
-              public telefono: string,
-              public fechaCreate?: string,
+              public precio: string,
+              public cantidad: number,
+              public descripcion: string,
+              public archivo: any,
+              public categoria: Categoria,
+              public estado?: boolean,
               public id?: number) {}
 }
 
@@ -44,5 +51,3 @@ interface Pageable {
   unpaged: boolean;
   paged: boolean;
 }
-
-

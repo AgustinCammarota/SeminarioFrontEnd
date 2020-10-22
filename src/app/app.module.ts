@@ -14,13 +14,13 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
   declarations: [
     AppComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RoutesRoutingModule,
-        ComponentModule,
-        NgxMaskModule.forRoot(options)
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    RoutesRoutingModule,
+    ComponentModule,
+    NgxMaskModule.forRoot(options),
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
