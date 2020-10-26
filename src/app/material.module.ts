@@ -12,8 +12,7 @@ import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dia
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
-
-
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -34,7 +33,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     MatDialogModule,
     MatSnackBarModule,
     MatSelectModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+    MatCardModule
   ],
   exports: [
     MatToolbarModule,
@@ -48,7 +48,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     MatDialogModule,
     MatSnackBarModule,
     MatSelectModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+    MatCardModule
   ]
 })
 export class MaterialModule { }

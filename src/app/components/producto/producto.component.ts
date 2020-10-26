@@ -11,6 +11,9 @@ import {flatMap, map} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import Swal, {SweetAlertResult} from 'sweetalert2';
 import {FormularioProductoComponent} from './formulario-producto/formulario-producto.component';
+import {DetalleProductoComponent} from './detalle-producto/detalle-producto.component';
+import {Categoria} from '../../models/categoria';
+import {CategoriaService} from '../../services/categoria.service';
 
 
 @Component({
@@ -21,6 +24,7 @@ import {FormularioProductoComponent} from './formulario-producto/formulario-prod
 export class ProductoComponent implements OnInit {
 
   productos: Producto[] | any = [];
+  categorias: Categoria[] = [];
   nombreControl = new FormControl();
   productoFiltrado: Observable<Producto[]>;
   displayedColumns: string[] = ['No.', 'Nombre', 'Precio', 'Cantidad', 'Categoria', 'Estado', 'Fecha', 'Acciones'];
@@ -34,10 +38,12 @@ export class ProductoComponent implements OnInit {
 
   constructor(private service: ProductoService,
               private router: Router,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog,
+              public categoriaService: CategoriaService) { }
 
   ngOnInit(): void {
     this.calcularRangos();
+    this.cargarCategorias();
   }
 
   calcularRangos(): void {
@@ -78,18 +84,28 @@ export class ProductoComponent implements OnInit {
     this.dataSource.data = [event.option.value];
   }
 
+  openDetalleProducto(producto: Producto): void {
+    this.dialog.open(DetalleProductoComponent, {
+      width: '750px',
+      data: producto,
+      hasBackdrop: true
+    });
+  }
+
   openFormulario(tipo: string, producto?: Producto): void {
     let dialogRef;
 
     if (tipo === 'N') {
       dialogRef = this.dialog.open(FormularioProductoComponent, {
         width: '500px',
-        data: {}
+        data: [this.categorias],
+        hasBackdrop: true
       });
     } else {
       dialogRef = this.dialog.open(FormularioProductoComponent, {
         width: '500px',
-        data: producto
+        data: [this.categorias, producto],
+        hasBackdrop: true
       });
     }
 
@@ -142,5 +158,15 @@ export class ProductoComponent implements OnInit {
 
   private filtrar(termino: string): Observable<Producto[]> {
     return this.service.getProductoFiltro(termino.toLowerCase());
+  }
+
+  private cargarCategorias(): void {
+    this.loading = true;
+    this.categoriaService.getCategorias().subscribe((categorias: Categoria[]) => {
+      this.loading = false;
+      this.categorias = categorias;
+    }, () => {
+      this.router.navigate(['/error']);
+    });
   }
 }

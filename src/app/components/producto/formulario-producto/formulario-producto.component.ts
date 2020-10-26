@@ -4,10 +4,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Producto} from '../../../models/producto';
-import {CategoriaService} from '../../../services/categoria.service';
 import {Categoria} from '../../../models/categoria';
 import {Router} from '@angular/router';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-formulario-producto',
@@ -20,37 +19,26 @@ export class FormularioProductoComponent implements OnInit {
   formulario: FormGroup;
   producto: Producto | any = {};
   titulo: string;
-  loading = true;
+  loading = false;
   categoriaSeleccionada: Categoria;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   fotoSeleccionada: File;
 
   constructor(private productoService: ProductoService,
-              private categoriaService: CategoriaService,
               private router: Router,
               private form: FormBuilder,
               private snackBar: MatSnackBar,
               private dialogRef: MatDialogRef<FormularioProductoComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: Producto) {}
+              @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
+    this.categorias = this.data[0];
     this.crearFormulario();
-
-    this.titulo = Object.keys(this.data).length === 0 ? 'Registrar Producto' : 'Actualizar Producto';
-
-    this.categoriaService.getCategorias().subscribe((categorias: Categoria[]) => {
-      this.loading = false;
-      this.categorias = categorias;
-    }, () => {
-      this.router.navigate(['/error']);
-    });
+    this.titulo = this.data.length === 1 ? 'Registrar Producto' : 'Actualizar Producto';
   }
 
   guardar(): void {
-    if (this.fotoSeleccionada === null) {
-     // Validar cuando no se seleccione ninguna iamgen setear valor de imagen estatica
-    }
     this.loading = true;
     this.producto = new Producto(this.formulario.value.nombre.trim(),
       this.formulario.value.precio,
@@ -59,14 +47,18 @@ export class FormularioProductoComponent implements OnInit {
       this.formulario.value.archivo,
       this.formulario.value.categoria,
       true);
-    if (Object.keys(this.data).length === 0) {
-      this.productoService.saveProducto(this.producto, this.fotoSeleccionada).subscribe(producto => {
+    if (this.data.length === 1) {
+      this.productoService.saveProducto(this.producto).subscribe(producto => {
         this.loading = false;
-        this.snackBar.open(`¡Producto ${producto.nombre} agregado con exito!`, 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition
-        });
+        if (this.fotoSeleccionada) {
+          this.guardarProductoFoto(producto);
+        } else {
+          this.snackBar.open(`¡Producto ${producto.nombre} agregado con exito!`, 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition
+          });
+        }
         this.dialogRef.close(producto);
       }, error => {
         this.loading = false;
@@ -77,14 +69,19 @@ export class FormularioProductoComponent implements OnInit {
         });
       });
     } else {
-      this.producto.id = this.data.id;
-      this.productoService.updateProducto(this.producto, this.fotoSeleccionada).subscribe(producto => {
+      this.producto.id = this.data[1].id;
+      this.producto.fechaCreate = this.data[1].fechaCreate;
+      this.productoService.updateProducto(this.producto).subscribe(producto => {
         this.loading = false;
-        this.snackBar.open(`¡Producto ${producto.nombre} actualizado con exito!`, 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition
-        });
+        if (this.fotoSeleccionada) {
+          this.guardarProductoFoto(producto);
+        } else {
+          this.snackBar.open(`¡Producto ${producto.nombre} actualizado con exito!`, 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition
+          });
+        }
         this.dialogRef.close(producto);
       }, error => {
         this.loading = false;
@@ -110,14 +107,33 @@ export class FormularioProductoComponent implements OnInit {
     }
   }
 
+  private guardarProductoFoto(producto: Producto): void {
+    this.loading = true;
+    this.productoService.saveProductoFoto(producto.id.toString(), this.fotoSeleccionada).subscribe(p => {
+      this.loading = false;
+      this.snackBar.open(`¡Producto ${p.nombre} agregado con exito!`, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition
+      });
+    }, error => {
+      this.loading = false;
+      Swal.fire({
+        icon: 'error',
+        title: error.error.mensaje,
+        text: error.error.error,
+      });
+    });
+  }
+
   private crearFormulario(): void {
     this.formulario = this.form.group({
-      nombre: [this.data.nombre, [Validators.required, Validators.pattern('^[a-zA-Z0-9]+$')]],
-      precio: [this.data.precio, [Validators.required]],
-      cantidad: [this.data.cantidad, [Validators.required]],
-      descripcion: [this.data.descripcion, [Validators.required]],
-      archivo: [this.data.archivo],
-      categoria: [this.data.categoria, [Validators.required]]
+      nombre: [this.data.length === 2 ? this.data[1].nombre : '', [Validators.required, Validators.pattern('^[a-zA-Z-0-9 ]+$')]],
+      precio: [this.data.length === 2 ? this.data[1].precio : '', [Validators.required]],
+      cantidad: [this.data.length === 2 ? this.data[1].cantidad : '', [Validators.required]],
+      descripcion: [this.data.length === 2 ? this.data[1].descripcion : '', [Validators.required]],
+      archivo: [this.data.length === 2 ? this.data[1].archivo : ''],
+      categoria: [this.data.length === 2 ? this.data[1].categoria : '', [Validators.required]]
     });
   }
 

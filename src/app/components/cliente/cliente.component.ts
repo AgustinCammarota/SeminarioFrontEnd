@@ -112,12 +112,14 @@ export class ClienteComponent implements OnInit {
     if (tipo === 'N') {
       dialogRef = this.dialog.open(FormularioClienteComponent, {
         width: '400px',
-        data: {}
+        data: {},
+        hasBackdrop: true
       });
     } else {
       dialogRef = this.dialog.open(FormularioClienteComponent, {
         width: '400px',
-        data: cliente
+        data: cliente,
+        hasBackdrop: true
       });
     }
 

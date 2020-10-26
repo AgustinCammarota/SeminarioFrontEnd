@@ -57,6 +57,7 @@ export class FormularioClienteComponent implements OnInit {
       });
     } else {
       this.cliente.id = this.data.id;
+      this.cliente.fechaCreate = this.data.fechaCreate;
       this.service.updateCliente(this.cliente).subscribe(cliente => {
         this.loading = false;
         this.snackBar.open(`¡Cliente ${cliente.nombre} actualizado con exito!`, 'Cerrar', {
@@ -88,7 +89,7 @@ export class FormularioClienteComponent implements OnInit {
   get nombreNovalido(): boolean {
     return this.formulario.get('nombre').invalid &&
       this.formulario.get('nombre').touched &&
-      !this.formulario.get('nombre').errors.required;
+      this.formulario.get('nombre').errors.pattern;
   }
 
   get emailNovalido(): boolean {

@@ -12,9 +12,9 @@ import {HttpClientModule} from '@angular/common/http';
 import { FooterComponent } from './layout/footer/footer.component';
 import { FormularioClienteComponent } from './cliente/formulario-cliente/formulario-cliente.component';
 import {NgxMaskModule} from 'ngx-mask';
-import {ErrorComponent} from './layout/error/error.component';
 import {ProductoComponent} from './producto/producto.component';
 import {FormularioProductoComponent} from './producto/formulario-producto/formulario-producto.component';
+import { DetalleProductoComponent } from './producto/detalle-producto/detalle-producto.component';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import {FormularioProductoComponent} from './producto/formulario-producto/formul
     FooterComponent,
     FormularioClienteComponent,
     FormularioProductoComponent,
-    ErrorComponent
+    DetalleProductoComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +44,6 @@ import {FormularioProductoComponent} from './producto/formulario-producto/formul
     ClienteComponent,
     SidebarComponent,
     LayoutComponent,
-    ErrorComponent,
     ProductoComponent
   ]
 })

@@ -73,7 +73,7 @@
 
                 <ng-container matColumnDef="Fecha">
                   <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                  <td mat-cell *matCellDef="let cliente"> {{cliente.fechaCreate}} </td>
+                  <td mat-cell *matCellDef="let cliente"> {{cliente.fechaCreate | date:"dd/MM/yyyy"}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Acciones">

@@ -18,6 +18,10 @@ export class ProductoService {
     return this.http.get<PageProducto>(`${URL_API_PRODUCTOS}/page`, {params});
   }
 
+  getProductoFoto(idProducto: number): Observable<any> {
+    return this.http.get<any>(`${URL_API_PRODUCTOS}/uploads/img/${idProducto}`);
+  }
+
   getProductoFiltro(termino: string): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${URL_API_PRODUCTOS}/filtrar/${termino}`);
   }
@@ -30,27 +34,26 @@ export class ProductoService {
     return this.http.get<Producto>(`${URL_API_PRODUCTOS}/${idProducto}`);
   }
 
-  saveProducto(producto: Producto, archivo: File): Observable<Producto> {
-    return this.http.post<Producto>(`${URL_API_PRODUCTOS}`, this.createFormDate(producto, archivo));
+  saveProductoFoto(idProducto: string, archivo: File): Observable<Producto> {
+    return this.http.post<Producto>(`${URL_API_PRODUCTOS}/upload`, this.createFormDate(idProducto, archivo));
   }
 
-  updateProducto(producto: Producto, archivo: File): Observable<Producto> {
-    return this.http.put<Producto>(`${URL_API_PRODUCTOS}/${producto.id}`, this.createFormDate(producto, archivo));
+  saveProducto(producto: Producto): Observable<Producto> {
+    return this.http.post<Producto>(`${URL_API_PRODUCTOS}`, producto, {headers: this.cabeceras});
+  }
+
+  updateProducto(producto: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${URL_API_PRODUCTOS}/${producto.id}`, producto, {headers: this.cabeceras});
   }
 
   deleteProducto(producto: Producto): Observable<Producto> {
     return this.http.delete<Producto>(`${URL_API_PRODUCTOS}/${producto.id}`, {headers: this.cabeceras});
   }
 
-  private createFormDate(producto: Producto, archivo: File): FormData {
+  private createFormDate(idProducto: string, archivo: File): FormData {
     const formDataProducto = new FormData();
     formDataProducto.append('archivo', archivo);
-    formDataProducto.append('nombre', producto.nombre);
-    formDataProducto.append('precio', producto.precio);
-    formDataProducto.append('cantidad', producto.cantidad.toString());
-    formDataProducto.append('descripcion', producto.descripcion);
-    formDataProducto.append('estado', producto.estado.toString());
-    formDataProducto.append('categoria', JSON.stringify(producto.categoria));
+    formDataProducto.append('idProducto', idProducto);
 
     return formDataProducto;
   }

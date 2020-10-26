@@ -58,7 +58,7 @@
 
                 <ng-container matColumnDef="Precio">
                   <th mat-header-cell *matHeaderCellDef> Precio </th>
-                  <td mat-cell *matCellDef="let producto"> {{producto.precio}}</td>
+                  <td mat-cell *matCellDef="let producto">$ {{producto.precio}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="Cantidad">
@@ -68,7 +68,7 @@
 
                 <ng-container matColumnDef="Categoria">
                   <th mat-header-cell *matHeaderCellDef> Categoria </th>
-                  <td mat-cell *matCellDef="let producto">   </td>
+                  <td mat-cell *matCellDef="let producto">{{producto.categoria.categoria}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="Estado">
@@ -78,13 +78,13 @@
 
                 <ng-container matColumnDef="Fecha">
                   <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                  <td mat-cell *matCellDef="let producto"> {{producto.fechaCreate}} </td>
+                  <td mat-cell *matCellDef="let producto"> {{producto.fechaCreate | date:"dd/MM/yyyy"}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Acciones">
                   <th mat-header-cell *matHeaderCellDef></th>
                   <td mat-cell *matCellDef="let producto" class="p-mat-cell">
-                    <button class="btn botones-tabla text-dark">
+                    <button class="btn botones-tabla text-dark" (click)="openDetalleProducto(producto)">
                       <i class="far fa-eye"></i>
                     </button>
                     <button class="btn botones-tabla text-dark" (click)="openFormulario('E', producto)">
