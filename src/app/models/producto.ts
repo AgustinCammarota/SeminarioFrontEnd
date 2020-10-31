@@ -15,15 +15,16 @@ export interface PageProducto {
 }
 
 export interface Producto {
-  id?: number;
   nombre: string;
   precio: string;
   cantidad: number;
   descripcion: string;
-  archivo: any;
   categoria: Categoria;
-  estado?: boolean;
-  fechaCreate?: string;
+  fechaCreate: Date;
+  id?: number;
+  archivoHashCode?: number;
+  foto?: string;
+  nombreFoto?: any;
 }
 
 export class Producto {
@@ -31,10 +32,12 @@ export class Producto {
               public precio: string,
               public cantidad: number,
               public descripcion: string,
-              public archivo: any,
               public categoria: Categoria,
-              public estado?: boolean,
-              public id?: number) {}
+              public fechaCreate: Date,
+              public id?: number,
+              public archivoHashCode?: number,
+              public foto?: string,
+              public nombreFoto?: any) {}
 }
 
 interface Sort {

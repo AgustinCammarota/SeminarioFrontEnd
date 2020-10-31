@@ -18,24 +18,16 @@ export class ProductoService {
     return this.http.get<PageProducto>(`${URL_API_PRODUCTOS}/page`, {params});
   }
 
-  getProductoFoto(idProducto: number): Observable<any> {
-    return this.http.get<any>(`${URL_API_PRODUCTOS}/uploads/img/${idProducto}`);
-  }
-
   getProductoFiltro(termino: string): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${URL_API_PRODUCTOS}/filtrar/${termino}`);
-  }
-
-  getProductoPorCategoria(categoria: string): Observable<Producto[]> {
-    return this.http.get<Producto[]>(`${URL_API_PRODUCTOS}/categorias/${categoria}`);
   }
 
   getProducto(idProducto: number): Observable<Producto> {
     return this.http.get<Producto>(`${URL_API_PRODUCTOS}/${idProducto}`);
   }
 
-  saveProductoFoto(idProducto: string, archivo: File): Observable<Producto> {
-    return this.http.post<Producto>(`${URL_API_PRODUCTOS}/upload`, this.createFormDate(idProducto, archivo));
+  saveProductoFoto(idProducto: string, archivo: File, nombreFoto: string): Observable<Producto> {
+    return this.http.post<Producto>(`${URL_API_PRODUCTOS}/upload`, this.createFormDate(idProducto, archivo, nombreFoto));
   }
 
   saveProducto(producto: Producto): Observable<Producto> {
@@ -50,10 +42,11 @@ export class ProductoService {
     return this.http.delete<Producto>(`${URL_API_PRODUCTOS}/${producto.id}`, {headers: this.cabeceras});
   }
 
-  private createFormDate(idProducto: string, archivo: File): FormData {
+  private createFormDate(idProducto: string, archivo: File, nombreFoto: string): FormData {
     const formDataProducto = new FormData();
     formDataProducto.append('archivo', archivo);
     formDataProducto.append('idProducto', idProducto);
+    formDataProducto.append('nombreFoto', nombreFoto);
 
     return formDataProducto;
   }

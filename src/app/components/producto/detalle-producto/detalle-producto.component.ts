@@ -1,8 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ProductoService} from '../../../services/producto.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Producto} from '../../../models/producto';
-import {Observable} from 'rxjs';
+import {URL_API_PRODUCTOS} from '../../../config/config';
 
 @Component({
   selector: 'app-detalle-producto',
@@ -11,14 +10,11 @@ import {Observable} from 'rxjs';
 })
 export class DetalleProductoComponent implements OnInit {
 
-  loading = false;
-  imagen: Observable<any>;
+  BASE_END_POINT = URL_API_PRODUCTOS + '/uploads/img/' + this.data.id + '?archivoHashCode=' + this.data.archivoHashCode;
 
-  constructor(private productoService: ProductoService,
-              @Inject(MAT_DIALOG_DATA) public data: Producto) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Producto) { }
 
   ngOnInit(): void {
-    this.imagen = this.productoService.getProductoFoto(this.data.id);
   }
 
 }

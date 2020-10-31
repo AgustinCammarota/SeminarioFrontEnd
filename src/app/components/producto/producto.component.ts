@@ -6,7 +6,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {ProductoService} from '../../services/producto.service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {PageEvent} from '@angular/material/paginator';
+import {PageEvent, MatPaginatorIntl} from '@angular/material/paginator';
 import {flatMap, map} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import Swal, {SweetAlertResult} from 'sweetalert2';
@@ -14,6 +14,7 @@ import {FormularioProductoComponent} from './formulario-producto/formulario-prod
 import {DetalleProductoComponent} from './detalle-producto/detalle-producto.component';
 import {Categoria} from '../../models/categoria';
 import {CategoriaService} from '../../services/categoria.service';
+
 
 
 @Component({
@@ -39,9 +40,11 @@ export class ProductoComponent implements OnInit {
   constructor(private service: ProductoService,
               private router: Router,
               public dialog: MatDialog,
-              public categoriaService: CategoriaService) { }
+              public categoriaService: CategoriaService,
+              private paginator: MatPaginatorIntl) { }
 
   ngOnInit(): void {
+    this.paginator.itemsPerPageLabel = 'Registros por página';
     this.calcularRangos();
     this.cargarCategorias();
   }
@@ -138,7 +141,7 @@ export class ProductoComponent implements OnInit {
     }).then((result: SweetAlertResult) => {
       if (result.isConfirmed) {
         this.service.deleteProducto(producto).subscribe(() => {
-          this.productos = this.productos.filter(p => p.id === producto.id);
+          this.productos = this.productos.filter(p => p.id !== producto.id);
           Swal.fire(
             'Eliminado!',
             'El producto ha sido eliminado.',

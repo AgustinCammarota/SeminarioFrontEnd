@@ -1,52 +1,52 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Cliente} from '../../../models/cliente';
-import {ClienteService} from '../../../services/cliente.service';
-import Swal from 'sweetalert2';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
-
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ProveedorService} from '../../../services/proveedor.service';
+import {Proveedor} from '../../../models/proveedor';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-formulario',
-  templateUrl: './formulario-cliente.component.html',
-  styleUrls: ['./formulario-cliente.component.css']
+  selector: 'app-formulario-proveedor',
+  templateUrl: './formulario-proveedor.component.html',
+  styleUrls: ['./formulario-proveedor.component.css']
 })
-export class FormularioClienteComponent implements OnInit {
+export class FormularioProveedorComponent implements OnInit {
 
   formulario: FormGroup;
-  cliente: Cliente | any = {};
+  proveedor: Proveedor | any = {};
   titulo: string;
   loading = false;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(private form: FormBuilder,
-              private service: ClienteService,
+              private service: ProveedorService,
               private snackBar: MatSnackBar,
-              private dialogRef: MatDialogRef<FormularioClienteComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: Cliente) {}
+              private dialogRef: MatDialogRef<FormularioProveedorComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: Proveedor) { }
 
   ngOnInit(): void {
     this.crearFormulario();
-    this.titulo = Object.keys(this.data).length === 0 ? 'Registrar Cliente' : 'Actualizar Cliente';
+    this.titulo = Object.keys(this.data).length === 0 ? 'Registrar Proveedor' : 'Actualizar Proveedor';
   }
 
   guardar(): void {
     this.loading = true;
-    this.cliente = new Cliente(this.formulario.value.nombre.trim(),
-                                this.formulario.value.email.trim(),
-                                this.formulario.value.dni,
-                                this.formulario.value.telefono);
+    this.proveedor = new Proveedor(this.formulario.value.nombre.trim(),
+      this.formulario.value.email.trim(),
+      this.formulario.value.direccion,
+      this.formulario.value.telefono,
+      null);
     if (Object.keys(this.data).length === 0) {
-      this.service.saveCliente(this.cliente).subscribe(cliente => {
+      this.service.saveProveedor(this.proveedor).subscribe(proveedor => {
         this.loading = false;
-        this.snackBar.open(`¡Cliente ${cliente.nombre} agregado con exito!`, 'Cerrar', {
+        this.snackBar.open(`¡Proveedor ${proveedor.nombre} agregado con exito!`, 'Cerrar', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition
         });
-        this.dialogRef.close(cliente);
+        this.dialogRef.close(proveedor);
       }, error => {
         this.loading = false;
         Swal.fire({
@@ -56,15 +56,15 @@ export class FormularioClienteComponent implements OnInit {
         });
       });
     } else {
-      this.cliente.id = this.data.id;
-      this.service.updateCliente(this.cliente).subscribe(cliente => {
+      this.proveedor.id = this.data.id;
+      this.service.updateProveedor(this.proveedor).subscribe(proveedor => {
         this.loading = false;
-        this.snackBar.open(`¡Cliente ${cliente.nombre} actualizado con exito!`, 'Cerrar', {
+        this.snackBar.open(`¡Proveedor ${proveedor.nombre} actualizado con exito!`, 'Cerrar', {
           duration: 3000,
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition
         });
-        this.dialogRef.close(cliente);
+        this.dialogRef.close(proveedor);
       }, error => {
         this.loading = false;
         Swal.fire({
@@ -80,8 +80,9 @@ export class FormularioClienteComponent implements OnInit {
     this.formulario = this.form.group({
       nombre: [this.data.nombre, [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
       email: [this.data.email, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$')]],
-      dni: [this.data.dni, [Validators.required]],
-      telefono: [this.data.telefono]
+      direccion: [this.data.direccion, [Validators.pattern('^[a-zA-Z-0-9 ]+$')]],
+      telefono: [this.data.telefono, [Validators.required]],
+      productos: [this.data.productos]
     });
   }
 
@@ -97,15 +98,9 @@ export class FormularioClienteComponent implements OnInit {
       !this.formulario.get('email').errors.required;
   }
 
-  get dniNovalido(): boolean {
-    return this.formulario.get('dni').invalid &&
-      this.formulario.get('dni').touched &&
-      !this.formulario.get('dni').errors.required;
-  }
-
-  get telefonoNovalido(): boolean {
-    return this.formulario.get('telefono').invalid &&
-      this.formulario.get('telefono').touched &&
-      !this.formulario.get('telefono').errors.required;
+  get direccionNovalido(): boolean {
+    return this.formulario.get('direccion').invalid &&
+      this.formulario.get('direccion').touched &&
+      !this.formulario.get('direccion').errors.required;
   }
 }

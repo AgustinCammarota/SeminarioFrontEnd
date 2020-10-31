@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ClienteService} from '../../services/cliente.service';
 import {Cliente, PageCliente} from '../../models/cliente';
 import {MatTableDataSource} from '@angular/material/table';
-import {PageEvent} from '@angular/material/paginator';
+import {PageEvent, MatPaginatorIntl} from '@angular/material/paginator';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {flatMap, map} from 'rxjs/operators';
@@ -32,9 +32,11 @@ export class ClienteComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
               private router: Router,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog,
+              private paginator: MatPaginatorIntl) { }
 
   ngOnInit(): void {
+    this.paginator.itemsPerPageLabel = 'Registros por página';
     this.calcularRangos();
   }
 
@@ -88,7 +90,7 @@ export class ClienteComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.clienteService.deleteCliente(cliente).subscribe(() => {
-          this.clientes = this.clientes.filter(c => c.id === cliente.id);
+          this.clientes = this.clientes.filter(c => c.id !== cliente.id);
           Swal.fire(
             'Eliminado!',
             'El cliente ha sido eliminado.',

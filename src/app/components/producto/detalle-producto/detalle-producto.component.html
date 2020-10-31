@@ -1,8 +1,5 @@
-<div class="container">
-
-  <div *ngIf="loading" class="text-center my-5"><i class="fas fa-spinner fa-4x fa-pulse"></i></div>
-
-  <div class="row" *ngIf="!loading">
+<div class="container animated fade fadeIn">
+  <div class="row">
     <div class="col-md-1">
       <div mat-dialog-title>
         <i class="material-icons text-muted" style="font-size: 70px">article</i>
@@ -28,39 +25,57 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="!loading">
+  <div class="row">
     <div class="col-md-12">
       <mat-dialog-content class="mat-typography">
         <div class="row">
           <div class="col-md-6">
-            <img src="assets/images/nofoto.png" alt="No Foto" class="img-fluid img-thumbnail">
+            <img *ngIf="data.archivoHashCode"
+                 [src]="this.BASE_END_POINT" alt="Foto producto" class="img-fluid img-thumbnail w-100 h-100">
+            <img *ngIf="!data.archivoHashCode"
+                 src="assets/images/nofoto.png" alt="Foto producto" class="img-fluid img-thumbnail w-100 h-100">
           </div>
           <div class="col-md-6">
             <mat-card class="h-100" style="font-size: 15px;">
               <div class="row text-muted">
-                <div class="col-12 mb-1">
+                <div class="col-12 mb-2">
                   <strong>Nombre:</strong> <span class="ml-2">{{data.nombre}}</span>
                 </div>
-                <div class="col-12 my-1">
+                <div class="col-12 my-2">
                   <strong>Precio:</strong> <span class="ml-2">$ {{data.precio}}</span>
                 </div>
-                <div class="col-12 my-1">
+                <div class="col-12 my-2">
                   <strong>Categoria:</strong> <span class="ml-2">{{data.categoria.categoria}}</span>
                 </div>
-                <div class="col-12 my-1">
+                <div class="col-12 my-2">
                   <strong>Cantidad:</strong> <span class="ml-2">{{data.cantidad}}</span>
                 </div>
-                <div class="col-12 my-1">
-                  <strong>Descripción:</strong> <span class="ml-2">{{data.descripcion}}</span>
+                <div class="col-12 my-2">
+                  <strong>Actualizado en:</strong> <span class="ml-2">{{data.fechaCreate | date:"dd/MM/yyyy"}}</span>
                 </div>
-                <div class="col-12 my-1">
-                  <strong>Creado en:</strong> <span class="ml-2">{{data.fechaCreate}}</span>
-                </div>
-                <div class="col-12 mt-1">
-                  <strong>Estado:</strong> <span class="ml-2">{{data.estado}}</span>
+                <div class="col-12 mt-2">
+                  <strong>Estado:</strong>
+                  <span class="badge badge-pill badge-success ml-3" *ngIf="data.cantidad > 10">
+                      DISPONIBLE
+                  </span>
+                  <span class="badge badge-pill badge-warning ml-3" *ngIf="data.cantidad < 11 && data.cantidad > 0">
+                      STOCK LIMITADO
+                  </span>
+                  <span class="badge badge-pill badge-danger ml-3" *ngIf="data.cantidad === 0">
+                      SIN STOCK
+                  </span>
                 </div>
               </div>
             </mat-card>
+          </div>
+          <div class="col-md-12 mt-3 mb-2">
+            <div class="row text-justify">
+              <div class="col-md-12">
+                <mat-card class="h-100 text-muted" style="font-size: 15px;">
+                  <strong>Descripción:</strong> <span class="ml-2">{{data.descripcion}}</span>
+                </mat-card>
+              </div>
+            </div>
           </div>
         </div>
       </mat-dialog-content>

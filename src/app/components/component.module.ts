@@ -15,6 +15,9 @@ import {NgxMaskModule} from 'ngx-mask';
 import {ProductoComponent} from './producto/producto.component';
 import {FormularioProductoComponent} from './producto/formulario-producto/formulario-producto.component';
 import { DetalleProductoComponent } from './producto/detalle-producto/detalle-producto.component';
+import { ProveedorComponent } from './proveedor/proveedor.component';
+import { DetalleProveedorComponent } from './proveedor/detalle-proveedor/detalle-proveedor.component';
+import { FormularioProveedorComponent } from './proveedor/formulario-proveedor/formulario-proveedor.component';
 
 
 @NgModule({
@@ -28,7 +31,10 @@ import { DetalleProductoComponent } from './producto/detalle-producto/detalle-pr
     FooterComponent,
     FormularioClienteComponent,
     FormularioProductoComponent,
-    DetalleProductoComponent
+    DetalleProductoComponent,
+    ProveedorComponent,
+    DetalleProveedorComponent,
+    FormularioProveedorComponent
   ],
   imports: [
     CommonModule,

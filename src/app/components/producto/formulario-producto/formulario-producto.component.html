@@ -31,7 +31,7 @@
             <div class="col-md-6 mt-3">
               <mat-form-field appearance="fill">
                 <mat-label>Precio*</mat-label>
-                <input matInput formControlName="precio" maxlength="10" type="text" mask="separator.2" thousandSeparator="," prefix="$ ">
+                <input matInput formControlName="precio" maxlength="25" type="text" mask="separator.2" thousandSeparator="," prefix="$ ">
                 <mat-hint>Ej. 1,000.00</mat-hint>
               </mat-form-field>
             </div>
@@ -48,7 +48,7 @@
               <mat-form-field appearance="fill">
                 <mat-label>Categoria*</mat-label>
                 <mat-select formControlName="categoria">
-                  <mat-option *ngFor="let categoria of categorias" [value]="categoria">
+                  <mat-option *ngFor="let categoria of categorias" [value]="categoria.categoria">
                     {{categoria.categoria}}
                   </mat-option>
                 </mat-select>
@@ -58,8 +58,8 @@
 
             <div class="col-md-12 mt-3">
               <mat-form-field appearance="fill">
-                <mat-label>Seleccionar un archivo</mat-label>
-                <ngx-mat-file-input formControlName="archivo" (change)="seleccionarFoto($event)"></ngx-mat-file-input>
+                <mat-label> {{!esProductoNuevo && data[1].nombreFoto ? data[1].nombreFoto : 'Seleccionar un archivo'}}</mat-label>
+                <ngx-mat-file-input formControlName="foto" (change)="seleccionarFoto($event)"></ngx-mat-file-input>
               </mat-form-field>
             </div>
 

@@ -20,6 +20,7 @@ export class FormularioProductoComponent implements OnInit {
   producto: Producto | any = {};
   titulo: string;
   loading = false;
+  esProductoNuevo: boolean;
   categoriaSeleccionada: Categoria;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -34,32 +35,38 @@ export class FormularioProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.categorias = this.data[0];
+    this.esProductoNuevo = this.data.length === 1;
     this.crearFormulario();
     this.titulo = this.data.length === 1 ? 'Registrar Producto' : 'Actualizar Producto';
   }
 
   guardar(): void {
     this.loading = true;
-    this.producto = new Producto(this.formulario.value.nombre.trim(),
+    const categoriaSeleccioanda = this.categorias.find(categoria => categoria.categoria === this.formulario.value.categoria);
+    this.producto = new Producto(
+      this.formulario.value.nombre.trim(),
       this.formulario.value.precio,
       this.formulario.value.cantidad,
       this.formulario.value.descripcion,
-      this.formulario.value.archivo,
-      this.formulario.value.categoria,
-      true);
-    if (this.data.length === 1) {
+      categoriaSeleccioanda,
+      new Date());
+
+    if (this.esProductoNuevo) {
       this.productoService.saveProducto(this.producto).subscribe(producto => {
         this.loading = false;
+
         if (this.fotoSeleccionada) {
-          this.guardarProductoFoto(producto);
+          this.producto.id = producto.id;
+          this.guardarProductoFoto(this.producto);
         } else {
-          this.snackBar.open(`¡Producto ${producto.nombre} agregado con exito!`, 'Cerrar', {
-            duration: 3000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition
-          });
+          this.dialogRef.close(producto);
         }
-        this.dialogRef.close(producto);
+
+        this.snackBar.open(`¡Producto ${producto.nombre} agregado con exito!`, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition
+        });
       }, error => {
         this.loading = false;
         Swal.fire({
@@ -70,19 +77,21 @@ export class FormularioProductoComponent implements OnInit {
       });
     } else {
       this.producto.id = this.data[1].id;
-      this.producto.fechaCreate = this.data[1].fechaCreate;
+      this.producto.nombreFoto = this.data[1].nombreFoto;
       this.productoService.updateProducto(this.producto).subscribe(producto => {
         this.loading = false;
+
         if (this.fotoSeleccionada) {
           this.guardarProductoFoto(producto);
         } else {
-          this.snackBar.open(`¡Producto ${producto.nombre} actualizado con exito!`, 'Cerrar', {
-            duration: 3000,
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition
-          });
+          this.dialogRef.close(producto);
         }
-        this.dialogRef.close(producto);
+
+        this.snackBar.open(`¡Producto ${producto.nombre} actualizado con exito!`, 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition
+        });
       }, error => {
         this.loading = false;
         Swal.fire({
@@ -109,13 +118,10 @@ export class FormularioProductoComponent implements OnInit {
 
   private guardarProductoFoto(producto: Producto): void {
     this.loading = true;
-    this.productoService.saveProductoFoto(producto.id.toString(), this.fotoSeleccionada).subscribe(p => {
+    this.productoService.saveProductoFoto(producto.id.toString(), this.fotoSeleccionada, this.fotoSeleccionada.name)
+      .subscribe(productoFoto => {
       this.loading = false;
-      this.snackBar.open(`¡Producto ${p.nombre} agregado con exito!`, 'Cerrar', {
-        duration: 3000,
-        horizontalPosition: this.horizontalPosition,
-        verticalPosition: this.verticalPosition
-      });
+      this.dialogRef.close(productoFoto);
     }, error => {
       this.loading = false;
       Swal.fire({
@@ -128,12 +134,12 @@ export class FormularioProductoComponent implements OnInit {
 
   private crearFormulario(): void {
     this.formulario = this.form.group({
-      nombre: [this.data.length === 2 ? this.data[1].nombre : '', [Validators.required, Validators.pattern('^[a-zA-Z-0-9 ]+$')]],
-      precio: [this.data.length === 2 ? this.data[1].precio : '', [Validators.required]],
-      cantidad: [this.data.length === 2 ? this.data[1].cantidad : '', [Validators.required]],
-      descripcion: [this.data.length === 2 ? this.data[1].descripcion : '', [Validators.required]],
-      archivo: [this.data.length === 2 ? this.data[1].archivo : ''],
-      categoria: [this.data.length === 2 ? this.data[1].categoria : '', [Validators.required]]
+      nombre: [!this.esProductoNuevo ? this.data[1].nombre : '', [Validators.required, Validators.pattern('^[a-zA-Z-0-9 ]+$')]],
+      precio: [!this.esProductoNuevo ? this.data[1].precio : '', [Validators.required]],
+      cantidad: [!this.esProductoNuevo ? this.data[1].cantidad : '', [Validators.required]],
+      descripcion: [!this.esProductoNuevo ? this.data[1].descripcion : '', [Validators.required]],
+      foto: [],
+      categoria: [!this.esProductoNuevo ? this.data[1].categoria.categoria : '', [Validators.required]]
     });
   }
 
