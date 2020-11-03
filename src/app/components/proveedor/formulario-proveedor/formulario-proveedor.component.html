@@ -5,7 +5,7 @@
   <div class="row" *ngIf="!loading">
     <div class="col-md-12">
       <div mat-dialog-title class="d-flex align-items-center bordes">
-        <i class="material-icons titulo-color" style="font-size: 40px">accessibility_new</i>
+        <i class="material-icons titulo-color" style="font-size: 50px">accessibility_new</i>
         <span class="ml-2 tim-note titulo-color">{{titulo}}</span>
       </div>
     </div>
@@ -47,13 +47,10 @@
                 <input matInput formControlName="direccion" maxlength="100">
                 <mat-icon matSuffix>explore</mat-icon>
                 <mat-hint>Ej. Av. libertador 72XX</mat-hint>
-                <mat-error *ngIf="direccionNovalido">
-                  La Dirección no puede contener caracteres especiales
-                </mat-error>
               </mat-form-field>
             </div>
 
-            <div class="col-md-6 mt-3 mb-4">
+            <div class="col-md-6 mt-3">
               <mat-form-field appearance="fill">
                 <mat-label>Telefono*</mat-label>
                 <input matInput formControlName="telefono" mask=" (000) 0000-0000" prefix="+54">
@@ -61,12 +58,68 @@
                 <mat-hint>Ej. (000) 0000-0000</mat-hint>
               </mat-form-field>
             </div>
+
+            <div class="col-md-12 mt-4">
+              <mat-form-field class= "pl-1">
+                <input type="text"
+                       id="input"
+                       placeholder="Filtrar por Nombre o Categoria"
+                       matInput
+                       [formControl]="nombreControl"
+                       [matAutocomplete]="auto"
+                       (keypress)="filtrarProductos()">
+                <mat-icon matSuffix class="limpiar-filtro" (click)="limpiarFiltro()">
+                  clear
+                </mat-icon>
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                  (optionSelected)="seleccionarProducto($event)"
+                                  [displayWith]="mostrarNombre">
+                  <mat-option *ngFor="let producto of productoFiltrado | async" [value]="producto">
+                    {{producto.nombre + ' - ' + producto.categoria.categoria}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 mt-1 mb-4">
+              <div *ngIf="productos.length === 0">
+                <div class="alert alert-warning text-center mt-3">
+                  <span class="text-dark ml-5"><strong>¡Debe seleccionar al menos un producto para dar de alta un proveedor!</strong></span>
+                </div>
+              </div>
+              <table class="table table-hover"  *ngIf="productos.length > 0">
+                <thead>
+                <tr>
+                  <th scope="col"><span class="text-muted font-weight-bold">Nombre</span></th>
+                  <th scope="col"><span class="text-muted font-weight-bold">Categoria</span></th>
+                  <th scope="col"><span class="text-muted font-weight-bold">Descripción</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let producto of productos">
+                  <td>{{producto.nombre}}</td>
+                  <td>{{producto.categoria.categoria}}</td>
+                  <td [matTooltip]="producto.descripcion"
+                      matTooltipPosition="above"
+                      matTooltipHideDelay="1">
+                    {{producto.descripcion.slice(0, 100)}}
+                  </td>
+                  <td>
+                    <button mat-icon-button (click)="borrarProducto(producto)">
+                      <i class="text-danger far fa-trash-alt" style="font-size: 20px;"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </form>
       </mat-dialog-content>
       <mat-dialog-actions align="end" class="mb-1">
         <button mat-raised-button color="warn" mat-dialog-close>Cancelar</button>
-        <button mat-stroked-button [disabled]="formulario.invalid" type="button" (click)="guardar()" color="primary">Guardar</button>
+        <button mat-stroked-button [disabled]="formulario.invalid || productos.length === 0"
+                type="button" (click)="guardar()" color="primary">Guardar</button>
       </mat-dialog-actions>
     </div>
   </div>

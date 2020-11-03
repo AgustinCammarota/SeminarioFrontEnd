@@ -11,6 +11,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import Swal from 'sweetalert2';
 import {ProveedorService} from '../../services/proveedor.service';
 import {FormularioProveedorComponent} from './formulario-proveedor/formulario-proveedor.component';
+import {DetalleProveedorComponent} from './detalle-proveedor/detalle-proveedor.component';
 
 @Component({
   selector: 'app-proveedor',
@@ -108,18 +109,26 @@ export class ProveedorComponent implements OnInit {
     });
   }
 
+  openDetalle(proveedor: Proveedor): void {
+    this.dialog.open(DetalleProveedorComponent, {
+      width: '750px',
+      data: proveedor,
+      hasBackdrop: true
+    });
+  }
+
   openFormulario(tipo: string, proveedor?: Proveedor): void {
     let dialogRef;
 
     if (tipo === 'N') {
       dialogRef = this.dialog.open(FormularioProveedorComponent, {
-        width: '600px',
+        width: '900px',
         data: {},
         hasBackdrop: true
       });
     } else {
       dialogRef = this.dialog.open(FormularioProveedorComponent, {
-        width: '600px',
+        width: '900px',
         data: proveedor,
         hasBackdrop: true
       });

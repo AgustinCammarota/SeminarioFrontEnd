@@ -1,1 +1,86 @@
-<p>detalle-proveedor works!</p>
+<div class="container animated fade fadeIn">
+  <div class="row">
+    <div class="col-md-1">
+      <div mat-dialog-title>
+        <i class="material-icons text-muted" style="font-size: 70px">article</i>
+      </div>
+    </div>
+    <div class="col-md-11">
+      <div class="row">
+        <div class="col-md-11">
+          <div class="ml-3 mt-4 w-100 text-muted" style="font-size: 30px">
+            <span>Proveedor: <span class="text-primary">{{data.nombre}}</span></span>
+            <hr>
+          </div>
+        </div>
+
+        <div class="col-md-1">
+          <mat-dialog-actions>
+            <button mat-icon-button mat-dialog-close>
+              <i class="material-icons" style="font-size: 45px;">highlight_off</i>
+            </button>
+          </mat-dialog-actions>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <mat-dialog-content class="mat-typography">
+        <div class="row">
+          <div class="col-md-12">
+            <mat-card class="h-100" style="font-size: 15px;">
+              <div class="row text-muted">
+                <div class="col-6 my-1">
+                  <strong>Nombre:</strong> <span class="ml-2">{{data.nombre}}</span>
+                </div>
+                <div class="col-6 my-1">
+                  <strong>Correo:</strong> <span class="ml-2">{{data.email}}</span>
+                </div>
+                <div class="col-6 my-1">
+                  <strong>Telefono:</strong> <span class="ml-2">{{data.telefono | mask: '(000) 0000-0000'}}</span>
+                </div>
+                <div class="col-6 my-1">
+                  <strong>Dirección:</strong> <span class="ml-2">{{data.direccion}}</span>
+                </div>
+                <div class="col-6 my-1">
+                  <strong>Creado en:</strong> <span class="ml-2">{{data.fechaCreate | date:"dd/MM/yyyy"}}</span>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+          <div class="col-md-12 mt-3 mb-2">
+            <div class="row text-justify">
+              <div class="col-md-12">
+                <mat-card>
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <th scope="col"><span class="text-muted font-weight-bold">Nombre</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold">Categoria</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold">Descripción</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let producto of data.productos">
+                      <td>{{producto.nombre}}</td>
+                      <td>{{producto.categoria.categoria}}</td>
+                      <td [matTooltip]="producto.descripcion"
+                          matTooltipPosition="above"
+                          matTooltipHideDelay="1">
+                        {{producto.descripcion.slice(0, 100)}}
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-dialog-content>
+    </div>
+  </div>
+</div>
+

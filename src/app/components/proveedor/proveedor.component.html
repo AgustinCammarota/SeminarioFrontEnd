@@ -33,7 +33,7 @@
                                     (optionSelected)="seleccionarProveedor($event)"
                                     [displayWith]="mostrarNombre">
                     <mat-option *ngFor="let proveedor of proveedorFiltrado | async" [value]="proveedor">
-                      {{proveedor.nombre ? proveedor.nombre : ''}}
+                      {{proveedor.nombre ? proveedor.nombre.toUpperCase() : ''}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -79,7 +79,7 @@
                 <ng-container matColumnDef="Acciones">
                   <th mat-header-cell *matHeaderCellDef></th>
                   <td mat-cell *matCellDef="let proveedor" class="p-mat-cell">
-                    <button class="btn botones-tabla text-dark">
+                    <button class="btn botones-tabla text-dark" (click)="openDetalle(proveedor)">
                       <i class="far fa-eye"></i>
                     </button>
                     <button class="btn botones-tabla text-dark" (click)="openFormulario('E', proveedor)">
