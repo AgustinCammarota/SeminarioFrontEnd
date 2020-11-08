@@ -18,6 +18,10 @@ import { DetalleProductoComponent } from './producto/detalle-producto/detalle-pr
 import { ProveedorComponent } from './proveedor/proveedor.component';
 import { DetalleProveedorComponent } from './proveedor/detalle-proveedor/detalle-proveedor.component';
 import { FormularioProveedorComponent } from './proveedor/formulario-proveedor/formulario-proveedor.component';
+import { PedidoComponent } from './pedido/pedido.component';
+import { DetallePedidoComponent } from './pedido/detalle-pedido/detalle-pedido.component';
+import { FormularioPedidoComponent } from './pedido/formulario-pedido/formulario-pedido.component';
+import { DetalleClienteComponent } from './cliente/detalle-cliente/detalle-cliente.component';
 
 
 @NgModule({
@@ -34,7 +38,11 @@ import { FormularioProveedorComponent } from './proveedor/formulario-proveedor/f
     DetalleProductoComponent,
     ProveedorComponent,
     DetalleProveedorComponent,
-    FormularioProveedorComponent
+    FormularioProveedorComponent,
+    PedidoComponent,
+    DetallePedidoComponent,
+    FormularioPedidoComponent,
+    DetalleClienteComponent
   ],
   imports: [
     CommonModule,

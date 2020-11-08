@@ -14,11 +14,14 @@ import {MatSelectModule} from '@angular/material/select';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import {MatCardModule} from '@angular/material/card';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatStepperModule} from '@angular/material/stepper';
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 
 
 @NgModule({
   providers: [
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}}
   ],
   declarations: [],
   imports: [
@@ -36,7 +39,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatSelectModule,
     MaterialFileInputModule,
     MatCardModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatStepperModule
   ],
   exports: [
     MatToolbarModule,
@@ -52,7 +56,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatSelectModule,
     MaterialFileInputModule,
     MatCardModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }

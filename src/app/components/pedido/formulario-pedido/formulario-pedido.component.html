@@ -1,0 +1,371 @@
+<div class="container animated fade fadeIn">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div mat-dialog-title class="d-flex align-items-center bordes">
+        <i class="material-icons titulo-color" style="font-size: 40px">sticky_note_2</i>
+        <span class="ml-2 tim-note titulo-color">Generar Nuevo Pedido</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <mat-dialog-content class="mat-typography">
+        <mat-card class="mb-3 mt-2">
+          <mat-horizontal-stepper #stepper>
+            <mat-step>
+              <ng-template matStepLabel>Datos del Cliente</ng-template>
+
+              <div class="row mt-5">
+
+                <div class="col-md-12">
+                  <p class="display-4" style="font-size: 15px">Por favor, eliga una opcion para obtener los datos del cliente: </p>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Seleccione una opcion*</mat-label>
+                    <mat-select [formControl]="seleccionCliente">
+                      <mat-option value="N" class="text-muted">Crear un nuevo cliente llenando los datos del formulario</mat-option>
+                      <mat-option value="E" class="text-muted">Buscar un cliente registrado previamente en el sistema</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6 mt-4" *ngIf="seleccionCliente.value === 'E'">
+                  <mat-form-field class="example-full-width pl-1">
+                    <input type="text"
+                           placeholder="Filtrar por cliente por nombre"
+                           matInput
+                           [formControl]="filtroCliente"
+                           [matAutocomplete]="auto"
+                           (keypress)="filtrarCliente()">
+                    <mat-icon matSuffix class="limpiar-filtro" (click)="limpiarFiltro('C')">
+                      clear
+                    </mat-icon>
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                      (optionSelected)="seleccionarCliente($event)"
+                                      [displayWith]="mostrarNombreCliente">
+                      <mat-option *ngFor="let cliente of clienteFiltrado | async" [value]="cliente">
+                        {{cliente.nombre ? cliente.nombre.toUpperCase() : ''}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-12">
+                  <div *ngIf="validarClienteVacio && seleccionCliente.value === 'E'">
+                    <div class="alert alert-warning text-center mt-2">
+                      <span class="text-dark ml-5"><strong>¡Debe seleccionar un cliente para poder generar un pedido!</strong></span>
+                    </div>
+                  </div>
+
+                  <table class="table table-hover"  *ngIf="!validarClienteVacio && seleccionCliente.value === 'E'">
+                    <thead>
+                    <tr>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">Nombre</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">Correo</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">DNI</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">Telefono</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr >
+                      <td>{{cliente.nombre.toUpperCase()}}</td>
+                      <td>{{cliente.email}}</td>
+                      <td>{{cliente.dni | mask: '00.000.000'}}</td>
+                      <td>{{cliente.telefono | mask: '(000) 0000-0000'}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="col-md-12" *ngIf="seleccionCliente.value === 'N'">
+                  <form [formGroup]="formularioCliente">
+                    <div class="row">
+
+                      <div class="col-md-6 mb-2 mt-4">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Nombre Completo*</mat-label>
+                          <input matInput formControlName="nombre" maxlength="50" type="text">
+                          <mat-icon matSuffix>account_circle</mat-icon>
+                          <mat-hint>Ej. Phanter Gaming</mat-hint>
+                          <mat-error *ngIf="nombreNovalido">
+                            El Nombre no puede contener numeros o caracteres especiales
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6 mb-2 mt-4">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Correo Electronico*</mat-label>
+                          <input matInput formControlName="email" maxlength="50">
+                          <mat-icon matSuffix>alternate_email</mat-icon>
+                          <mat-hint>Ej. pat@example.com</mat-hint>
+                          <mat-error *ngIf="emailNovalido">
+                            El Correo tiene que tener un formato valido. Ej pat@example.com
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6">
+                        <mat-form-field appearance="fill">
+                          <mat-label>DNI*</mat-label>
+                          <input matInput formControlName="dni" mask="00.000.000">
+                          <mat-icon matSuffix>payment</mat-icon>
+                          <mat-hint>Ej. 40.657.801</mat-hint>
+                          <mat-error *ngIf="dniNovalido">
+                            El DNI tiene que tener un formato valido. Ej 40.657.801
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Telefono</mat-label>
+                          <input matInput formControlName="telefono" mask=" (000) 0000-0000" prefix="+54">
+                          <mat-icon matSuffix>phone</mat-icon>
+                          <mat-hint>Ej. (000) 0000-0000</mat-hint>
+                          <mat-error *ngIf="telefonoNovalido">
+                            El Telefono tiene que tener un formato valido. Ej (000) 0000-0000
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="col-md-12 mt-2 d-flex justify-content-end">
+                  <div>
+                    <button mat-button matStepperNext><span style="font-size: 30px;">&raquo;</span></button>
+                  </div>
+                </div>
+
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Seleccionar Productos</ng-template>
+
+              <div class="row mt-5">
+                <div class="col-md-12">
+                  <p class="display-4 mb-2 pb-0" style="font-size: 15px">Por favor, busque los productos que desea agregar al pedido: </p>
+                  <mat-form-field appearance="fill">
+                    <input type="text"
+                           placeholder="Filtrar producto por nombre o categoria"
+                           matInput
+                           [formControl]="filtroProducto"
+                           [matAutocomplete]="auto"
+                           (keypress)="filtrarProductos()">
+                    <mat-icon matSuffix class="limpiar-filtro" (click)="limpiarFiltro('P')">
+                      clear
+                    </mat-icon>
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                      (optionSelected)="seleccionarProducto($event)"
+                                      [displayWith]="mostrarNombreProducto">
+                      <mat-option *ngFor="let producto of productoFiltrado | async" [value]="producto">
+                        {{producto.nombre + ' - ' + producto.categoria.categoria}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-12">
+                  <div *ngIf="lineaPedido.length === 0">
+                    <div class="alert alert-warning text-center mt-2">
+                      <span class="text-dark ml-5"><strong>¡Debe seleccionar al menos un producto para generar un pedido!</strong></span>
+                    </div>
+                  </div>
+                  <table class="table table-hover"  *ngIf="lineaPedido.length > 0">
+                    <thead>
+                    <tr>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">Nombre</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">Categoria</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">Precio</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold" style="font-size: 15px;">Cantidad</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of lineaPedido">
+                      <td>{{item.producto.nombre}}</td>
+                      <td>{{item.producto.categoria.categoria}}</td>
+                      <td>$ {{item.calcularImporte()}}</td>
+                      <td>
+                        <input class="ml-2"
+                               id="inputCantidad"
+                               value="{{item.cantidad}}"
+                               max="{{item.producto.cantidad}}"
+                               (change)="actulizarCantidad(item, $event)"
+                               style="width: 40px;"
+                               type="number">
+                      </td>
+                      <td>
+                        <button mat-icon-button (click)="borrarProducto(item)">
+                          <i class="text-danger far fa-trash-alt" style="font-size: 20px;"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="col-md-12 mt-2 d-flex justify-content-between">
+                  <div class="">
+                    <p *ngIf="lineaPedido.length > 0" class="display-4 mb-2pb-0 text-success" style="font-size: 20px">
+                      <strong><span class="mr-2">Total a Pagar:</span> ${{obtenerTotalPago}}</strong>
+                    </p>
+                  </div>
+                  <div>
+                    <button mat-button matStepperPrevious><span style="font-size: 30px;">&laquo;</span></button>
+                    <button mat-button matStepperNext><span style="font-size: 30px;">&raquo;</span></button>
+                  </div>
+                </div>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Completar Datos de Envio</ng-template>
+
+              <div class="row mt-5">
+
+                <div class="col-md-12">
+                  <p class="display-4" style="font-size: 15px">Por favor, eliga una opcion para recibir el pedido: </p>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Seleccione una opcion*</mat-label>
+                    <mat-select [formControl]="seleccionEnvio" (ngModelChange)="cargarProvincias()">
+                      <mat-option value="R" class="text-muted">Retirar el pedido por el local del vendedor</mat-option>
+                      <mat-option value="E" class="text-muted">Enviar el pedido al domicilio del comprador</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-12" *ngIf="seleccionEnvio.value === 'E'">
+                  <form [formGroup]="formularioDireccion">
+                    <div class="row">
+
+                      <div class="col-md-6 mb-3 mt-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Calle*</mat-label>
+                          <input matInput formControlName="calle" maxlength="100">
+                          <mat-hint>Ej. Av. Libertador</mat-hint>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6 mb-3 mt-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Numero*</mat-label>
+                          <input matInput formControlName="numero" mask="0*" maxlength="5">
+                          <mat-hint>Ej. 124</mat-hint>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6 mb-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Departamento*</mat-label>
+                          <input matInput formControlName="departamento" maxlength="10">
+                          <mat-hint>Ej. 4B</mat-hint>
+                          <mat-error *ngIf="departamentoNovalido">
+                            El Departamento no puede contener caracteres especiales
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6 mb-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Localidad*</mat-label>
+                          <input matInput formControlName="localidad" maxlength="100">
+                          <mat-hint>Ej. Belgrano</mat-hint>
+                          <mat-error *ngIf="localidadNoValida">
+                            La Localidad no puede contener numeros o caracteres especiales
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Codigo Postal*</mat-label>
+                          <input matInput formControlName="cp" type="text" mask="0*" maxlength="4">
+                          <mat-hint>Ej. 1228</mat-hint>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-6">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Provincia*</mat-label>
+                          <mat-select formControlName="provincia">
+                            <mat-option *ngFor="let provincia of provincias" [value]="provincia">
+                              {{provincia.provincia}}
+                            </mat-option>
+                          </mat-select>
+                          <mat-hint>Ej. Buenos Aires</mat-hint>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="col-md-12 mt-2 d-flex justify-content-end">
+                  <button mat-button matStepperPrevious><span style="font-size: 30px;">&laquo;</span></button>
+                  <button mat-button matStepperNext><span style="font-size: 30px;">&raquo;</span></button>
+                </div>
+              </div>
+
+            </mat-step>
+
+            <mat-step>
+              <ng-template matStepLabel>Completar Datos del Pedido</ng-template>
+              <div class="row mt-5">
+
+                <div class="col-md-12">
+                  <p class="display-4" style="font-size: 15px">Por favor, eliga una opcion para abonar el pedido: </p>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Seleccione una opcion*</mat-label>
+                    <mat-select [formControl]="seleccionPago">
+                      <mat-option value="E" class="text-muted">Realizar pago con efectivo</mat-option>
+                      <mat-option value="T" class="text-muted">Realizar pago con tarjeta</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-12 mt-2">
+                  <p class="display-4" style="font-size: 15px">Por favor, escriba una descripción para el pedido: </p>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Descripción</mat-label>
+                    <textarea maxlength="500" [formControl]="descripcion" matInput required></textarea>
+                    <mat-hint>Ej. Pedido de articulos electronicos...</mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-12 mt-4">
+                  <p class="display-4" style="font-size: 15px">Por favor, si es necesario, escriba una observación: </p>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Observación</mat-label>
+                    <textarea maxlength="500" [formControl]="observacion" matInput></textarea>
+                    <mat-hint>Ej. El pedido debe estar antes de tal fecha...</mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-12 mt-2 d-flex justify-content-end">
+                  <button mat-button matStepperPrevious><span class="pb-3" style="font-size: 30px;">&laquo;</span></button>
+                  <button class="text-center" mat-button matStepperNext (click)="stepper.reset()">
+                    <mat-icon class="">replay</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+            </mat-step>
+          </mat-horizontal-stepper>
+        </mat-card>
+
+
+      </mat-dialog-content>
+      <mat-dialog-actions align="end" class="mb-1">
+        <button mat-raised-button color="warn" mat-dialog-close>Cancelar</button>
+        <button mat-stroked-button [disabled]="(!cliente && formularioCliente.invalid) || (lineaPedido.length === 0) ||
+                                                  (seleccionEnvio.value === 'E' && formularioDireccion.invalid) ||
+                                                  descripcion.invalid"
+                type="button"
+                (click)="generarPedido()"
+                color="primary">
+          Generar Pedido
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+</div>
