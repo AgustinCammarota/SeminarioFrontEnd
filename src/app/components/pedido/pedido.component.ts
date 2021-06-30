@@ -10,7 +10,9 @@ import {PedidoService} from '../../services/pedido.service';
 import {flatMap, map} from 'rxjs/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {FormularioPedidoComponent} from './formulario-pedido/formulario-pedido.component';
-import {DetallePedidoComponent} from "./detalle-pedido/detalle-pedido.component";
+import {DetallePedidoComponent} from './detalle-pedido/detalle-pedido.component';
+import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
+import {Label} from 'ng2-charts';
 
 @Component({
   selector: 'app-pedido',
@@ -18,6 +20,24 @@ import {DetallePedidoComponent} from "./detalle-pedido/detalle-pedido.component"
   styleUrls: ['./pedido.component.css']
 })
 export class PedidoComponent implements OnInit {
+
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+  public barChartLabels: Label[] = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+
+  public barChartData: ChartDataSets[] = [
+    { data: [ 1000, 2500, 500, 1200, 3000, 600, 800, 1600, 2300, 1000, 4000, 5000], label: 'Pedidos' }
+  ];
 
   pageSizeOptions: number[] = [3, 5, 10, 20, 50];
   totalElements = 0;
@@ -99,7 +119,7 @@ export class PedidoComponent implements OnInit {
 
   openDetalle(pedido: Pedido): void {
     this.dialog.open(DetallePedidoComponent, {
-      width: '400px',
+      width: '60%',
       data: pedido,
       hasBackdrop: true
     });

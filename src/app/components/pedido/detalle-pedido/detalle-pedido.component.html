@@ -1,1 +1,126 @@
-<p>detalle-pedido works!</p>
+
+
+<div class="container">
+
+  <div class="row justify-content-around">
+
+    <div class="col-md-12 my-3 titulo-container">
+      <h1>Detalle del Pedido</h1>
+    </div>
+
+    <div class="col-md-5 contenedor-card">
+      <h2 class="text-success titulo-card">Cliente</h2>
+      <div class="mt-1 contenedor-headers">
+        <p>Nombre:</p>
+        <p>Email:</p>
+        <p>DNI:</p>
+        <p>Telefono:</p>
+      </div>
+
+      <div class="mt-1 contenedor-data">
+        <p>{{pedido.cliente.nombre}}</p>
+        <p [matTooltip]="pedido.cliente.email"
+           matTooltipPosition="above"
+           matTooltipHideDelay="1">{{pedido.cliente.email.slice(0, 40)}}</p>
+        <p>{{pedido.cliente.dni}}</p>
+        <p>{{pedido.cliente.telefono | mask: '(000) 0000-0000'}}</p>
+      </div>
+    </div>
+
+    <div class="col-md-5 contenedor-card">
+      <h2 class="text-success titulo-card">Factura</h2>
+      <div class="mt-1 contenedor-headers">
+        <p>Empresa:</p>
+        <p>Email:</p>
+        <p>Domicilio Fiscal:</p>
+        <p>N° de Factura:</p>
+        <p>Descargar Factura:</p>
+      </div>
+
+      <div class="mt-1 contenedor-data">
+        <p>{{pedido.factura.nombreEmpresa}}</p>
+        <p [matTooltip]="pedido.factura.email"
+           matTooltipPosition="above"
+           matTooltipHideDelay="1">{{pedido.factura.email.slice(0, 40)}}</p>
+        <p>{{pedido.factura.domicilioFiscal}}</p>
+        <p>{{pedido.factura.numeracion}}</p>
+        <button (click)="openFacturaPdf(pedido)" class="pdf-button"><span class="material-icons text-danger">picture_as_pdf</span></button>
+      </div>
+    </div>
+
+    <div class="col-md-5 mt-4 contenedor-card">
+      <h2 class="text-success titulo-card">Pedido</h2>
+      <div class="mt-1 contenedor-headers">
+        <p>Fecha de Creacion:</p>
+        <p>Descripcion:</p>
+        <p>Observacion:</p>
+        <p>Forma de Pago:</p>
+        <p>Total:</p>
+      </div>
+
+      <div class="mt-1 contenedor-data">
+        <p>{{pedido.createAt | date:"dd/MM/yyyy"}}</p>
+        <p [matTooltip]="pedido.descripcion"
+           matTooltipPosition="above"
+           matTooltipHideDelay="1">{{pedido.descripcion ? pedido.descripcion.slice(0, 30) : 'No dispone'}}</p>
+        <p [matTooltip]="pedido.observacion"
+           matTooltipPosition="above"
+           matTooltipHideDelay="1">{{pedido.observacion ? pedido.observacion.slice(0, 30) : 'No dispone'}}</p>
+        <p>{{pedido.formaPago}}</p>
+        <p>${{pedido.total}}</p>
+      </div>
+    </div>
+
+    <div class="col-md-5 mt-4 contenedor-card">
+      <div *ngIf="!pedido.direccion" class="contenedor-alert-direccion alert alert-warning text-center">
+        <p><strong>¡No hay informacion de envio, se retira por el local!</strong></p>
+      </div>
+
+      <h2 *ngIf="pedido.direccion" class="text-success titulo-card">Envio</h2>
+      <div *ngIf="pedido.direccion" class="mt-1 contenedor-headers">
+        <p>Localidad:</p>
+        <p>CP:</p>
+        <p>Calle:</p>
+        <p>Numero:</p>
+        <p>Departamento:</p>
+      </div>
+
+      <div *ngIf="pedido.direccion" class="mt-1 contenedor-data">
+        <p>{{pedido.direccion.localidad}}</p>
+        <p>{{pedido.direccion.codigoPostal}}</p>
+        <p>{{pedido.direccion.calle}}</p>
+        <p>{{pedido.direccion.numero}}</p>
+        <p>{{pedido.direccion.departamento}}</p>
+      </div>
+    </div>
+
+    <div class="col-md-12 mt-4 px-5">
+      <mat-card>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col"><span class="text-muted font-weight-bold">Nombre</span></th>
+            <th scope="col"><span class="text-muted font-weight-bold">Categoria</span></th>
+            <th scope="col"><span class="text-muted font-weight-bold">Descripción</span></th>
+            <th scope="col"><span class="text-muted font-weight-bold">Cantidad</span></th>
+            <th scope="col"><span class="text-muted font-weight-bold">Precio</span></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of pedido.items">
+            <td>{{item.producto.nombre}}</td>
+            <td>{{item.producto.categoria.categoria}}</td>
+            <td [matTooltip]="item.producto.descripcion"
+                matTooltipPosition="above"
+                matTooltipHideDelay="1">
+              {{item.producto.descripcion.slice(0, 50)}}
+            </td>
+            <td>{{item.producto.cantidad}}</td>
+            <td>${{item.producto.precio}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </mat-card>
+    </div>
+  </div>
+</div>

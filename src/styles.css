@@ -31,3 +31,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .fadeIn {
   animation-name: fadeIn;
 }
+
+.mat-elevation-z8 {
+  overflow: auto;
+}

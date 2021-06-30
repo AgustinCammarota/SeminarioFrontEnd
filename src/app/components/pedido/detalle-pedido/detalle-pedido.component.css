@@ -1,0 +1,73 @@
+.contenedor-card p {
+  margin-bottom: 7px;
+}
+
+.contenedor-card {
+  background-color: #f8f9fa;
+}
+
+.contenedor-card {
+  display: grid;
+  grid-template-rows: 40px 1fr;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 200px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%);
+}
+
+.titulo-card {
+  display: flex;
+  align-content: center;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.contenedor-headers {
+  font-size: 14px;
+  font-weight: bold;
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.contenedor-data {
+  font-size: 14px;
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.contenedor-alert-direccion {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  height: 200%;
+  width: 200%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 45px;
+}
+
+.pdf-button {
+  border: none;
+  background: transparent;
+}
+
+.pdf-button:active, .pdf-button:focus {
+  border: none;
+  outline: none;
+}
+
+.titulo-container h1 {
+  border-bottom: 1px solid #28a745;
+  font-weight: lighter;
+  line-height: 35px;
+}

@@ -15,6 +15,7 @@ import {PedidoService} from '../../../services/pedido.service';
 import {Direccion} from '../../../models/direccion';
 import {Factura} from '../../../models/factura';
 import {MatDialogRef} from '@angular/material/dialog';
+import {PdfService} from "../../../services/pdf.service";
 
 @Component({
   selector: 'app-formulario-pedido',
@@ -45,7 +46,8 @@ export class FormularioPedidoComponent implements OnInit {
               private productoService: ProductoService,
               private provinciaService: ProvinciaService,
               private pedidoSevice: PedidoService,
-              private dialogRef: MatDialogRef<FormularioPedidoComponent>) { }
+              private dialogRef: MatDialogRef<FormularioPedidoComponent>,
+              private pdfService: PdfService) { }
 
   ngOnInit(): void {
     this.seleccionEnvio.patchValue('R');
@@ -197,21 +199,48 @@ export class FormularioPedidoComponent implements OnInit {
       confirmButtonText: 'Si, generarlo!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.pedidoSevice.savePedido(this.pedido).subscribe(pedido => {
-          this.dialogRef.close(pedido);
-          Swal.fire(
-            'Generado!',
-            'El pedido ha sido generado con exito.',
-            'success'
-          );
-        }, error => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: error.error.mensaje,
-          });
-        });
+
+        if (this.seleccionCliente.value === 'N') {
+          this.guardarClienteAndPedido();
+        } else {
+          this.guardarPedido();
+        }
       }
+    });
+  }
+
+  guardarClienteAndPedido(): void {
+    this.clienteService.saveCliente(this.cliente).subscribe((cliente: Cliente) => {
+      this.pedido.cliente = cliente;
+      this.guardarPedido();
+    }, error => {
+      this.dispararError(error);
+    });
+  }
+
+  guardarPedido(): void {
+    this.pedidoSevice.savePedido(this.pedido).subscribe((pedido: Pedido) => {
+      this.pdfService.generarFacturaPdf(pedido);
+      this.dispararExito(pedido);
+    }, error => {
+      this.dispararError(error);
+    });
+  }
+
+  dispararExito(objecto): void {
+    this.dialogRef.close(objecto);
+    Swal.fire(
+      'Generado!',
+      'El pedido ha sido generado con exito.',
+      'success'
+    );
+  }
+
+  dispararError(error): void {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: error.error.mensaje,
     });
   }
 
@@ -219,7 +248,8 @@ export class FormularioPedidoComponent implements OnInit {
     const aleatorioUno = Math.round(Math.random() * 5);
     const aleatorioDos = Math.round(Math.random() * 5);
     let fecha = new Date().toISOString();
-    return  this.cliente.id +  + ' ' + aleatorioUno + ' - ' + aleatorioDos;
+    fecha = fecha.substr(0, fecha.search('T'));
+    return  this.cliente.id || '0030' +  + ' ' + aleatorioUno + ' - ' + aleatorioDos + '-' + fecha;
   }
 
   get validarClienteVacio(): boolean {

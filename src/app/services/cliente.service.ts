@@ -18,6 +18,10 @@ export class ClienteService {
     return this.http.get<PageCliente>(`${URL_API_CLIENTES}/page`, {params});
   }
 
+  getClientes(): Observable<Cliente[]> {
+    return this.http.get<Cliente[]>(`${URL_API_CLIENTES}`);
+  }
+
   getClienteFiltro(termino: string): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(`${URL_API_CLIENTES}/filtrar/${termino}`);
   }

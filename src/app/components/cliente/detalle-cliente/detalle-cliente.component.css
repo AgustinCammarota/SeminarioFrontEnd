@@ -1,0 +1,9 @@
+hr {
+  border-bottom: #007bff solid 2px !important;
+  margin-top: 8px !important;
+}
+
+.titulo-resumen {
+  color: #6c757d !important;
+  border-bottom: 1px solid #007bff;
+}

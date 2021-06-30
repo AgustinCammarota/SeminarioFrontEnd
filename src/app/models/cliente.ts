@@ -1,3 +1,5 @@
+import {Pedido} from './pedido';
+
 export interface PageCliente {
   content: Cliente[];
   pageable: Pageable;
@@ -19,6 +21,7 @@ export interface Cliente {
   dni: string;
   telefono: string;
   fechaCreate?: string;
+  pedidos?: Pedido[];
 }
 
 export class Cliente {
@@ -27,7 +30,8 @@ export class Cliente {
               public dni: string,
               public telefono: string,
               public fechaCreate?: string,
-              public id?: number) {}
+              public id?: number,
+              public pedidos?: Pedido[]) {}
 }
 
 interface Sort {

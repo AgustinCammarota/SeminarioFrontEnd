@@ -1,1 +1,95 @@
-<p>detalle-cliente works!</p>
+<div class="container animated fade fadeIn">
+  <div class="row">
+    <div class="col-md-1">
+      <div mat-dialog-title>
+        <i class="material-icons text-muted" style="font-size: 70px">article</i>
+      </div>
+    </div>
+    <div class="col-md-11">
+      <div class="row">
+        <div class="col-md-11">
+          <div class="ml-3 mt-4 w-100 text-muted" style="font-size: 30px">
+            <span>Cliente: <span class="text-primary">{{data.nombre}}</span></span>
+            <hr>
+          </div>
+        </div>
+
+        <div class="col-md-1">
+          <mat-dialog-actions>
+            <button mat-icon-button mat-dialog-close>
+              <i class="material-icons" style="font-size: 45px;">highlight_off</i>
+            </button>
+          </mat-dialog-actions>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <mat-dialog-content class="mat-typography">
+        <div class="row">
+          <div class="col-md-12">
+            <mat-card class="h-100" style="font-size: 15px;">
+              <div class="row text-muted">
+                <div class="col-6 my-1">
+                  <strong>Nombre:</strong> <span class="ml-2">{{data.nombre}}</span>
+                </div>
+                <div class="col-6 my-1">
+                  <strong>Correo:</strong> <span class="ml-2">{{data.email}}</span>
+                </div>
+                <div class="col-6 my-1">
+                  <strong>Telefono:</strong> <span class="ml-2">{{data.telefono | mask: '(000) 0000-0000'}}</span>
+                </div>
+                <div class="col-6 my-1">
+                  <strong>DNI:</strong> <span class="ml-2">{{data.dni}}</span>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+
+          <div class="col-md-12 mt-3 mb-2" *ngIf="data.pedidos.length === 0">
+            <div class="alert alert-warning text-center">
+              <span class="mt-2 pt-1"><strong>¡El cliente no realizo ningun pedido!</strong></span>
+            </div>
+          </div>
+          <div class="col-md-12 mt-3 mb-2" *ngIf="data.pedidos.length > 0">
+            <div class="row text-justify">
+              <div class="col-md-12">
+                <h2 class="mt-3 titulo-resumen">Resumen Pedidos del Cliente</h2>
+                <mat-card>
+                  <table class="table table-hover">
+                    <thead>
+                    <tr>
+                      <th scope="col"><span class="text-muted font-weight-bold">Descripcion</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold">Observacion</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold">Forma de Pago</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold">Total</span></th>
+                      <th scope="col"><span class="text-muted font-weight-bold">Creado en</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let pedido of data.pedidos">
+                      <td [matTooltip]="pedido.descripcion"
+                          matTooltipPosition="above"
+                          matTooltipHideDelay="1">{{!pedido.descripcion ? 'Sin describir' : pedido.descripcion.slice(0, 50)}}</td>
+                      <td [matTooltip]="pedido.observacion"
+                          matTooltipPosition="above"
+                          matTooltipHideDelay="1">{{!pedido.observacion ? 'Sin describir' : pedido.observacion.slice(0, 50)}}</td>
+                      <td>
+                        {{pedido.formaPago}}
+                      </td>
+                      <td>$ {{pedido.total}}</td>
+                      <td>{{pedido.createAt | date:"dd/MM/yyyy"}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-dialog-content>
+    </div>
+  </div>
+</div>

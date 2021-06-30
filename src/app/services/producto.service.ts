@@ -18,6 +18,10 @@ export class ProductoService {
     return this.http.get<PageProducto>(`${URL_API_PRODUCTOS}/page`, {params});
   }
 
+  getProductos(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${URL_API_PRODUCTOS}`);
+  }
+
   getProductoFiltro(termino: string): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${URL_API_PRODUCTOS}/filtrar/${termino}`);
   }

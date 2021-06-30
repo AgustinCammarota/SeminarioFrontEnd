@@ -22,7 +22,12 @@ import { PedidoComponent } from './pedido/pedido.component';
 import { DetallePedidoComponent } from './pedido/detalle-pedido/detalle-pedido.component';
 import { FormularioPedidoComponent } from './pedido/formulario-pedido/formulario-pedido.component';
 import { DetalleClienteComponent } from './cliente/detalle-cliente/detalle-cliente.component';
+import { ChartsModule } from 'ng2-charts';
+import { PdfMakeWrapper } from 'pdfmake-wrapper' ;
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ReportesComponent } from './reportes/reportes.component';
 
+PdfMakeWrapper.setFonts(pdfFonts);
 
 @NgModule({
   declarations: [
@@ -42,7 +47,8 @@ import { DetalleClienteComponent } from './cliente/detalle-cliente/detalle-clien
     PedidoComponent,
     DetallePedidoComponent,
     FormularioPedidoComponent,
-    DetalleClienteComponent
+    DetalleClienteComponent,
+    ReportesComponent
   ],
   imports: [
     CommonModule,
@@ -51,6 +57,7 @@ import { DetalleClienteComponent } from './cliente/detalle-cliente/detalle-clien
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    ChartsModule,
     NgxMaskModule.forChild()
   ], exports: [
     NavbarComponent,

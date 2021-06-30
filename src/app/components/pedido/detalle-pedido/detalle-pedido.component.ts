@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {Pedido} from '../../../models/pedido';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {PdfService} from '../../../services/pdf.service';
 
 @Component({
   selector: 'app-detalle-pedido',
@@ -7,9 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DetallePedidoComponent implements OnInit {
 
-  constructor() { }
+  constructor( private dialogRef: MatDialogRef<DetallePedidoComponent>,
+               @Inject(MAT_DIALOG_DATA) public pedido: Pedido,
+               private pdfService: PdfService) { }
 
   ngOnInit(): void {
+  }
+
+  openFacturaPdf(pedido): void {
+    this.pdfService.generarFacturaPdf(pedido);
   }
 
 }

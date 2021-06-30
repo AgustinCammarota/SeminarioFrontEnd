@@ -11,6 +11,10 @@ import Swal from 'sweetalert2';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {FormularioClienteComponent} from './formulario-cliente/formulario-cliente.component';
+import {Pedido} from '../../models/pedido';
+import {ChartDataSets, ChartOptions, ChartType} from "chart.js";
+import {Label} from "ng2-charts";
+import {DetalleClienteComponent} from "./detalle-cliente/detalle-cliente.component";
 
 @Component({
   selector: 'app-cliente',
@@ -19,6 +23,24 @@ import {FormularioClienteComponent} from './formulario-cliente/formulario-client
 })
 export class ClienteComponent implements OnInit {
 
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+  public barChartLabels: Label[] = ['2016', '2017', '2018', '2019', '2020', '2021'];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+
+  public barChartData: ChartDataSets[] = [
+    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Clientes' }
+  ];
+
   pageSizeOptions: number[] = [3, 5, 10, 20, 50];
   totalElements = 0;
   nombreControl = new FormControl();
@@ -26,6 +48,7 @@ export class ClienteComponent implements OnInit {
   size = 4;
   clientes: Cliente[] | any = [];
   clienteFiltrado: Observable<Cliente[]>;
+  clienteDelMes: Cliente;
   displayedColumns: string[] = ['No.', 'Nombre', 'Correo', 'DNI', 'Telefono', 'Fecha', 'Acciones'];
   dataSource: MatTableDataSource<Cliente[]>;
   loading = true;
@@ -53,12 +76,25 @@ export class ClienteComponent implements OnInit {
     this.calcularRangos();
   }
 
+  obtenerClienteDelMes(): void {
+    this.clienteService.getClientes().subscribe(clientes => {
+      clientes.forEach((cliente: Cliente) => {
+        if (!this.clienteDelMes || cliente.pedidos.length > this.clienteDelMes.pedidos.length) {
+          this.clienteDelMes = cliente as Cliente;
+        }
+      });
+    }, () => {
+      this.router.navigate(['/error']);
+    });
+  }
+
   calcularRangos(): void {
     this.clienteService.getClientesPage(this.page.toString(), this.size.toString()).subscribe((cliente: PageCliente) => {
       this.loading = false;
       this.clientes = cliente.content;
       this.totalElements = cliente.totalElements as number;
       this.dataSource = new MatTableDataSource<Cliente[]>(this.clientes);
+      this.obtenerClienteDelMes();
     }, () => {
       this.router.navigate(['/error']);
     });
@@ -108,6 +144,14 @@ export class ClienteComponent implements OnInit {
     });
   }
 
+  openDetalleCliente(cliente): void {
+    this.dialog.open(DetalleClienteComponent, {
+      width: '1000px',
+      data: cliente,
+      hasBackdrop: true
+    });
+  }
+
   openFormulario(tipo: string, cliente?: Cliente): void {
     let dialogRef;
 
@@ -144,6 +188,13 @@ export class ClienteComponent implements OnInit {
 
   private filtrar(termino: string): Observable<Cliente[]> {
     return this.clienteService.getClienteFiltro(termino.toLowerCase());
+  }
+
+  get obtenerTotalPedidos(): number {
+    return !this.clienteDelMes ? 0 : this.clienteDelMes.pedidos.reduce((contadorTotal: number, current: Pedido) => {
+      contadorTotal = (contadorTotal || 0) + current.total;
+      return contadorTotal;
+    }, 0);
   }
 
 }

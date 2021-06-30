@@ -14,6 +14,8 @@ import {FormularioProductoComponent} from './formulario-producto/formulario-prod
 import {DetalleProductoComponent} from './detalle-producto/detalle-producto.component';
 import {Categoria} from '../../models/categoria';
 import {CategoriaService} from '../../services/categoria.service';
+import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
+import {Label} from 'ng2-charts';
 
 
 
@@ -24,6 +26,24 @@ import {CategoriaService} from '../../services/categoria.service';
 })
 export class ProductoComponent implements OnInit {
 
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+    scales: { xAxes: [{}], yAxes: [{}] },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      }
+    }
+  };
+  public barChartLabels: Label[] = [];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = true;
+
+  public barChartData: ChartDataSets[] = [
+    { data: [], label: 'Productos con Stock Limitado' }
+  ];
+  productosFiltrados: Producto[] | any = [];
   productos: Producto[] | any = [];
   categorias: Categoria[] = [];
   nombreControl = new FormControl();
@@ -45,8 +65,22 @@ export class ProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.paginator.itemsPerPageLabel = 'Registros por página';
+    this.generarGrafica();
     this.calcularRangos();
     this.cargarCategorias();
+  }
+
+  generarGrafica(): void {
+    this.service.getProductos().subscribe(product => {
+      this.productosFiltrados = product.filter(p => p.cantidad <= 10);
+      this.productosFiltrados.forEach(p => {
+        this.barChartLabels.push(p.nombre);
+        this.barChartData[0].data.push(p.cantidad);
+      });
+    });
+    this.productosFiltrados.slice(0, 3);
+    this.barChartLabels.slice(0 , 3);
+    this.barChartData[0].data.slice(0, 3);
   }
 
   calcularRangos(): void {
